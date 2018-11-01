@@ -1,0 +1,12 @@
+users table
+username | password
+
+happy songs
+username | url1
+username | url2
+
+sad songs
+username | url1
+username | url2
+
+

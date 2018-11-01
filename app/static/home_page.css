@@ -1,0 +1,13 @@
+h1 {
+    color: red;
+}
+
+#test {
+    text-align: right;
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    width: 100%;
+    position: fixed;
+    background-color: blue;
+}
