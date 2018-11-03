@@ -1,0 +1,11 @@
+#nav-bar {
+    font-size: 25px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    background-color: red;
+    width: 100%;
+    position: fixed;
+}
+
+

@@ -2,28 +2,41 @@
 <html>
 
 <head>
-    <meta charset="utf-8" />
     <title>Music Emotions Classifier</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="/static/home_page.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="/static/home-page.css" />
+
+    <script type="text/javascript" src="../static/main.js" async></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
+
+<script>
+
+    $(document).ready(function() {
+        $("#submit-url").click(submitURL);
+    });
+
+
+</script>
 
 <body>
 
-    <header>
+    <header style="text-align: right;">
 
-        <div id="test">
-            <nav id="nav-bar">
+        <nav id="nav-bar">
 
-                <a href="/test" class="nav-link">Test link</a>
+            <a href="/testpage" class="nav-link">Test link</a>
+            <a href="#hihi" class="nav-link">Test link 2</a>
 
-            </nav>
-        </div>
+        </nav>
     </header>
 
     <h1>hi</h1>
     <h2>bye</h2>
 
+    <input id="url-box" type="text">
+    <button id="submit-url" onclick="submitURL()">Submit</button>
+
 </body>
+
 
 </html>

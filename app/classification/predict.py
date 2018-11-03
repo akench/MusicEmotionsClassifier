@@ -1,10 +1,10 @@
 import tensorflow as tf
 import os
-from get_audio import dl_audio
-from make_spectrogram import graph_spectrogram
+from app.classification.get_audio import dl_audio
+from app.classification.make_spectrogram import graph_spectrogram
 from PIL import Image
 import numpy as np
-import parse_img as parse_img
+from app.classification.parse_img import *
 import glob
 import numpy as np
 import time
@@ -55,7 +55,7 @@ def get_conf_per_class(spec_list):
 
     for img in spec_list:
 
-        img = parse_img.resize_crop(img, size=299, grey = False)
+        img = resize_crop(img, size=299, grey = False)
         arr = np.asarray(img)
 
         lbl = inference([arr])
@@ -90,5 +90,10 @@ def predict_class(youtube_link):
     return np.argmax(perc)
 
 
+def classify_emotion(url):
+
+    return label_to_emot[predict_class(url)]
+
+
 if __name__=='__main__':
-    print(predict_class('https://www.youtube.com/watch?v=mF3DCa4TbD0'))
+    print(classify_emotion('https://www.youtube.com/watch?v=mF3DCa4TbD0'))

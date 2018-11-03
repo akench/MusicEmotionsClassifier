@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 import youtube_dl
 from random import *
 import os.path
-from make_spectrogram import all_audio_to_spec
+from app.classification.make_spectrogram import all_audio_to_spec
 
 def dl_audio(url, emot, save = True):
 
