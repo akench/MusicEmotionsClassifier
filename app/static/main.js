@@ -1,6 +1,6 @@
-function submitURL() {
+function submitURL(event) {
 
-    let url = document.getElementById("url-box").value;
+    let url = event.data.val();
 
     $.ajax({
         url: "http://localhost:5000/classify",

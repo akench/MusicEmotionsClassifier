@@ -29,7 +29,6 @@ def get_wav_info(audio_file):
 
 def graph_spectrogram(audio_file, secs_per_spec = 10, save=True):
 
-
     if save:
         vid_id = audio_file.split('/')[-1].split('.')[0]
         emot = audio_file.split('/')[1]

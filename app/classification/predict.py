@@ -28,9 +28,7 @@ def load_graph(graph_file_path):
     return graph
 
 
-def inference(data):
-
-    graph = load_graph('/home/akench/dev/ML/output_graph.pb')
+def inference(data, graph):
 
     # list_of_tuples = [op.values()[0] for op in graph.get_operations()]
     # print(list_of_tuples)
@@ -52,13 +50,14 @@ def percentify(x):
 def get_conf_per_class(spec_list):
 
     label_list = [0, 0, 0, 0, 0, 0]
+    graph = load_graph('/home/akench/dev/ML/output_graph.pb')
 
     for img in spec_list:
 
         img = resize_crop(img, size=299, grey = False)
         arr = np.asarray(img)
 
-        lbl = inference([arr])
+        lbl = inference([arr], graph)
         label_list[lbl] += 1
 
     perc = percentify(label_list)

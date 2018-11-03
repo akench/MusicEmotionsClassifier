@@ -11,8 +11,6 @@ mod = Blueprint('routes', __name__)
 def classify():
     url = request.json['url']
 
-    import pdb; pdb.set_trace()
-
     emot = classify_emotion(url)
 
     return json.dumps(emot)
