@@ -1,5 +1,27 @@
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
 
 
+div.page-content {
+    margin-top: 70px;
+}
+
+
+.overview-section {
+    padding: 50px 100px 100px 100px;
+    background-color: #B5C2B7;
+}
+
+.login-section {
+    padding: 50px 100px 100px 100px;
+    background-color: #8C93A8;
+}
 
 #nav-project-name {
     font-size: 30px;

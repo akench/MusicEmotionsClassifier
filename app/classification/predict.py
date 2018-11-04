@@ -50,7 +50,7 @@ def percentify(x):
 def get_conf_per_class(spec_list):
 
     label_list = [0, 0, 0, 0, 0, 0]
-    graph = load_graph('/home/akench/dev/ML/output_graph.pb')
+    graph = load_graph('/home/akench/Desktop/output_graph.pb')
 
     for img in spec_list:
 
