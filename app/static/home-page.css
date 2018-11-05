@@ -8,9 +8,6 @@ header {
 }
 
 
-input[type="email"] {
-}
-
 
 div.page-content {
     margin-top: 70px;
@@ -49,6 +46,22 @@ div.page-content {
     background-color: #B5C2B7;
 }
 
+.auth-err {
+    color: red;
+    opacity: 0.5;
+    margin-bottom: 10px;
+}
+
+.alert {
+    position: fixed;
+    top: 70px;
+    left: 25%;
+    z-index: 100;
+    height: 45px;
+    width: 50%;
+    text-align: center;
+}
+
 
 #nav-project-name {
     font-size: 30px;
@@ -56,10 +69,4 @@ div.page-content {
 
 #register-submit-btn {
     background-color: #732C7B;
-}
-
-.auth-err {
-    color: red;
-    opacity: 0.5;
-    margin-bottom: 10px;
 }

@@ -18,6 +18,7 @@
         crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" media="screen" href="/static/home-page.css" />
     <script type="text/javascript" src="../static/main.js" async></script>
+    <script type="text/javascript" src="../static/errcodes.js" async></script>
 </head>
 
 <script>
@@ -27,7 +28,6 @@
         $('#input-password, #input-confirm-password').on('change keyup mouseup', checkPasswordsMatch);
 
         $('#input-email').on('change keyup mouseup', checkEmailNotEmpty);
-
 
         // set up click listener to send url to server
         // let urlbox = $("#url-box");
@@ -60,6 +60,8 @@
             </ul>
         </nav>
     </header>
+
+    <div class="alert alert-danger" role="alert" style="display: none;"></div>
 
 
     <!-- body of page -->
@@ -129,7 +131,7 @@
                                 <div class="form-group">
                                     <input type="password" class="form-control" id="input-confirm-password" placeholder="Confirm Password">
                                 </div>
-                                
+
 
                                 <div id="email-empty" class="auth-err" style="display: none;">
                                     Email address cannot be empty!
@@ -141,10 +143,10 @@
                                 <button type="button" class="btn btn-primary" id="register-submit-btn" onclick="sendRegisterData()">Submit</button>
                             </form>
 
-
-
-
                         </div>
+
+
+
                         <div class="tab-pane fade" id="login-content">
                             Login tab
                         </div>

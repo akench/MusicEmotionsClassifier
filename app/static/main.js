@@ -36,7 +36,7 @@ function checkPasswordsMatch() {
 function checkEmailNotEmpty() {
     let email = $('#input-email').val()
 
-    if(email === "") {
+    if (email === "") {
         $('#email-empty').show(100);
         $('#register-submit-btn').prop("disabled", true);
     } else {
@@ -60,10 +60,17 @@ function sendRegisterData() {
         data: JSON.stringify(payload),
         method: "POST",
         contentType: "application/json",
-        success: function(result) {
-            console.log(result);
+        success: function (result) {
+
+            if (result !== "0") {
+                let msg = codeToStr[result];
+
+                $('.alert').append(msg);
+                $('.alert').show(100);
+            }
+
         },
-        error: function(err) {
+        error: function (err) {
             console.log(err);
         }
     });

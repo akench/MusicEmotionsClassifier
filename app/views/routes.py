@@ -43,7 +43,7 @@ def register():
     except pymysql.IntegrityError as err:
         code, msg = err.args
 
-        print(code)
+        print("register err code: %s" % code)
 
         # email address already exists
         if code == 1062:
@@ -51,11 +51,6 @@ def register():
 
     return "0"
 
-
-
-@mod.errorhandler(401)
-def err(error):
-    return 'hi'
 
 
 @mod.route('/testpage')
