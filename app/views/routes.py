@@ -1,10 +1,21 @@
 from flask import render_template, Blueprint, request, abort
 import json
+import pymysql
+from werkzeug.security import generate_password_hash, check_password_hash
 
 from app.classification import classify_emotion
 
 
 mod = Blueprint('routes', __name__)
+
+conn = pymysql.connect(
+    host="localhost",
+    user="testuser",
+    password="password",
+    db="musicemotions"
+)
+
+cur = conn.cursor()
 
 
 @mod.route('/classify', methods=['POST'])
@@ -18,12 +29,28 @@ def classify():
 @mod.route('/register', methods=['POST'])
 def register():
 
-    form = request.form
-    email = form['email']
-    passwd = form['password']
-    confirm_passwd = form['confirm-password']
+    data = request.json
+    email = data['email']
+    password = data['password']
 
-    abort(401)
+    hashed_pw = generate_password_hash(password)
+
+    query = "INSERT INTO users VALUES('%s', '%s');" % (email, hashed_pw)
+
+    try :
+        cur.execute(query)
+        conn.commit()
+    except pymysql.IntegrityError as err:
+        code, msg = err.args
+
+        print(code)
+
+        # email address already exists
+        if code == 1062:
+            return "1"
+
+    return "0"
+
 
 
 @mod.errorhandler(401)

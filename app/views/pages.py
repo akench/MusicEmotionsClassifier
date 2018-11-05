@@ -4,6 +4,8 @@ mod = Blueprint('pages', __name__)
 
 @mod.route('/', methods=['GET'])
 def home_page():
+
+    yolo = "hihhii"
     return render_template('home-page.html')
 
 

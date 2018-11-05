@@ -24,13 +24,9 @@
 
     $(document).ready(function () {
 
-        $('#input-password').on('change keyup mouseup', function () {
-            checkPasswordsMatch();
-        });
+        $('#input-password, #input-confirm-password').on('change keyup mouseup', checkPasswordsMatch);
 
-        $('#input-confirm-password').on('change keyup mouseup', function () {
-            checkPasswordsMatch();
-        });
+        $('#input-email').on('change keyup mouseup', checkEmailNotEmpty);
 
 
         // set up click listener to send url to server
@@ -133,12 +129,16 @@
                                 <div class="form-group">
                                     <input type="password" class="form-control" id="input-confirm-password" placeholder="Confirm Password">
                                 </div>
+                                
 
-                                <div id="passwd-not-match" style="display: none;">
+                                <div id="email-empty" class="auth-err" style="display: none;">
+                                    Email address cannot be empty!
+                                </div>
+                                <div id="passwd-not-match" class="auth-err" style="display: none;">
                                     Passwords do not match!
                                 </div>
 
-                                <button type="submit" class="btn btn-primary" id="register-submit-btn">Submit</button>
+                                <button type="button" class="btn btn-primary" id="register-submit-btn" onclick="sendRegisterData()">Submit</button>
                             </form>
 
 

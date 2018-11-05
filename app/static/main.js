@@ -25,15 +25,47 @@ function checkPasswordsMatch() {
 
     if (pass !== confirmPass) {
         $('#passwd-not-match').show(100);
+        $('#register-submit-btn').prop("disabled", true);
     } else {
         $('#passwd-not-match').hide(100);
+        $('#register-submit-btn').prop("disabled", false);
     }
-
 }
 
 
+function checkEmailNotEmpty() {
+    let email = $('#input-email').val()
+
+    if(email === "") {
+        $('#email-empty').show(100);
+        $('#register-submit-btn').prop("disabled", true);
+    } else {
+        $('#email-empty').hide(100);
+        $('register-submit-btn').prop("disabled", false);
+    }
+}
+
+
+
+// we know the passwords must be different
 function sendRegisterData() {
 
+    let email = document.getElementById('input-email').value;
+    let passwd = document.getElementById('input-password').value;
 
+    let payload = { "email": email, "password": passwd };
+
+    $.ajax({
+        url: "http://localhost:5000/register",
+        data: JSON.stringify(payload),
+        method: "POST",
+        contentType: "application/json",
+        success: function(result) {
+            console.log(result);
+        },
+        error: function(err) {
+            console.log(err);
+        }
+    });
 }
 
