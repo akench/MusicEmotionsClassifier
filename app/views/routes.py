@@ -1,4 +1,4 @@
-from flask import render_template, Blueprint, request
+from flask import render_template, Blueprint, request, abort
 import json
 
 from app.classification import classify_emotion
@@ -15,6 +15,20 @@ def classify():
 
     return json.dumps(emot)
 
+@mod.route('/register', methods=['POST'])
+def register():
+
+    form = request.form
+    email = form['email']
+    passwd = form['password']
+    confirm_passwd = form['confirm-password']
+
+    abort(401)
+
+
+@mod.errorhandler(401)
+def err(error):
+    return 'hi'
 
 
 @mod.route('/testpage')

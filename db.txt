@@ -1,12 +1,9 @@
 users table
-username | password
+col: email, password
 
-happy songs
-username | url1
-username | url2
+user song table
+col : email, songURL
 
-sad songs
-username | url1
-username | url2
-
+song type table
+col: songURL, emotion
 

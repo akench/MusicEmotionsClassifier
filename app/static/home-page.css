@@ -8,6 +8,10 @@ header {
 }
 
 
+input[type="email"] {
+}
+
+
 div.page-content {
     margin-top: 70px;
 }
@@ -23,8 +27,33 @@ div.page-content {
     background-color: #8C93A8;
 }
 
+
+.nav-pills > li.nav-item > a.active {
+    background-color: #732C7B;
+    color: white;
+    box-shadow: 3px 3px grey;
+}
+
+.nav-pills > li.nav-item > a:not(.active) {
+    background: #9C8AA5;
+    color: white;
+    box-shadow: 3px 3px gray;
+}
+
+
+
+.tab-content {
+    padding: 30px 30px 30px 30px;
+    border-style: groove;
+    border-radius: 20px;
+    background-color: #B5C2B7;
+}
+
+
 #nav-project-name {
     font-size: 30px;
 }
 
-
+#register-submit-btn {
+    background-color: #732C7B;
+}
