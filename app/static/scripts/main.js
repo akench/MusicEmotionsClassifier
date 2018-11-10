@@ -120,11 +120,23 @@
                     $('.alert-success').append("You have successfully registered. Please log in.")
                     $('.alert-success').slideDown("slow");
 
+                    // switches to login tab
+                    $('#login-tab-btn').trigger("click");
+
                 }
 
             },
             error: function (err) {
                 console.log(err);
+
+                // remove any success alerts, if there are any
+                $('.alert-success').slideUp("fast");
+
+                $('.alert-danger').empty();
+                $('.alert-danger').slideUp("fast");
+                $('.alert-danger').append("There was an unknown error. Please try again later");
+                $('.alert-danger').slideDown("slow");
+
             }
         });
     }
