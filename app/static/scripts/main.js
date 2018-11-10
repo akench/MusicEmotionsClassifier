@@ -103,8 +103,23 @@
                 if (result !== "0") {
                     let msg = codeToStr[result];
 
-                    $('.alert').append(msg);
-                    $('.alert').show(100);
+                    // remove any success alerts, if there are any
+                    $('.alert-success').slideUp("fast");
+
+                    $('.alert-danger').empty();
+                    $('.alert-danger').slideUp("fast");
+                    $('.alert-danger').append(msg);
+                    $('.alert-danger').slideDown("slow");
+                } else {
+
+                    // remove any error alerts, if there are any
+                    $('.alert-danger').slideUp("fast");
+
+                    $('.alert-success').empty();
+                    $('.alert-success').slideUp("fast");
+                    $('.alert-success').append("You have successfully registered. Please log in.")
+                    $('.alert-success').slideDown("slow");
+
                 }
 
             },
@@ -126,11 +141,11 @@
             url: "http://localhost:5000/login",
             data: JSON.stringify(payload),
             method: "POST",
-            
-            success: function(data) {
+
+            success: function (data) {
 
             },
-            error: function(err) {
+            error: function (err) {
 
             }
         })
