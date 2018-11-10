@@ -23,7 +23,7 @@
 
         // did you leave any password fields blank?
         $('#input-password-reg, #input-confirm-password-reg').on('change keyup mouseup', checkPasswordNotEmptyRegister);
-        $('#input-password-login').on('change keyup mouseup', checkEmailNotEmptyLogin);
+        $('#input-password-login').on('change keyup mouseup', checkPasswordNotEmptyLogin);
 
         // did you leave any email fields blank?
         $('#input-email-reg').on('change keyup mouseup', checkEmailNotEmptyRegister);

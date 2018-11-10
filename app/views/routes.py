@@ -53,6 +53,8 @@ def register():
 
     return "0"
 
+
+
 # login route
 @mod.route('/login', methods=['POST'])
 def login():
