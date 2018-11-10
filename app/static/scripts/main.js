@@ -16,11 +16,11 @@
         $('#register-submit-btn').on('click', sendRegisterData);
 
         // click login btn
-        // TODO hi
+        $('#login-submit-btn').on('click', sendLoginData);
 
         // do passwords match for registering?
         $('#input-password-reg, #input-confirm-password-reg').on('change keyup mouseup', checkPasswordsMatch);
-       
+
         // did you leave any password fields blank?
         $('#input-password-reg, #input-confirm-password-reg').on('change keyup mouseup', checkPasswordNotEmptyRegister);
         $('#input-password-login').on('change keyup mouseup', checkEmailNotEmptyLogin);
@@ -88,7 +88,7 @@
         let pass = $('#input-password-reg').val();
         let confirmPass = $('#input-confirm-password-reg').val();
 
-        if(pass === "" || confirmPass == "") {
+        if (pass === "" || confirmPass == "") {
             $('#passwd-empty-register').show(100);
             $('#register-submit-btn').prop("disabled", true);
         } else {
@@ -99,10 +99,10 @@
 
 
     function checkPasswordNotEmptyLogin() {
-        
+
         let pass = $('#input-password-login').val();
 
-        if(pass === "") {
+        if (pass === "") {
             $('#passwd-empty-login').show(100);
             $('#login-submit-btn').prop("disabled", true);
         } else {
@@ -124,6 +124,31 @@
             $('#login-submit-btn').prop("disabled", false);
         }
     }
+
+
+
+    function sendLoginData() {
+
+        let email = document.getElementById('input-email-login').value;
+        let passwd = document.getElementById('input-password-login').value;
+
+        let payload = { "email": email, "password": passwd };
+
+        $.ajax({
+            url: "http://localhost:5000/login",
+            data: JSON.stringify(payload),
+            method: "POST",
+            contentType: "application/json",
+            success: function(result) {
+                console.log(result);
+            },
+            error: function(err) {
+                console.log(err);
+            }
+        });
+
+    }
+
 
 
 
@@ -183,27 +208,6 @@
         });
     }
 
-
-    function sendLoginData() {
-
-        let email = $('#input-email-login').val();
-        let passwd = $('input-password-login').val();
-
-        let payload = { "email": email, "password": passwd };
-
-        $.ajax({
-            url: "http://localhost:5000/login",
-            data: JSON.stringify(payload),
-            method: "POST",
-
-            success: function (data) {
-
-            },
-            error: function (err) {
-
-            }
-        })
-    }
 
 
 })();
