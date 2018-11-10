@@ -8,12 +8,25 @@
         checkEmailNotEmptyLogin();
         checkEmailNotEmptyRegister();
 
+        // same for password
+        checkPasswordNotEmptyLogin();
+        checkPasswordNotEmptyRegister();
+
+        // click register btn
         $('#register-submit-btn').on('click', sendRegisterData);
 
+        // click login btn
+        // TODO hi
+
+        // do passwords match for registering?
         $('#input-password-reg, #input-confirm-password-reg').on('change keyup mouseup', checkPasswordsMatch);
+       
+        // did you leave any password fields blank?
+        $('#input-password-reg, #input-confirm-password-reg').on('change keyup mouseup', checkPasswordNotEmptyRegister);
+        $('#input-password-login').on('change keyup mouseup', checkEmailNotEmptyLogin);
 
+        // did you leave any email fields blank?
         $('#input-email-reg').on('change keyup mouseup', checkEmailNotEmptyRegister);
-
         $('#input-email-login').on('change keyup mouseup', checkEmailNotEmptyLogin);
 
         // set up click listener to send url to server
@@ -66,6 +79,35 @@
         } else {
             $('#passwd-not-match').hide(100);
             $('#register-submit-btn').prop("disabled", false);
+        }
+    }
+
+
+    function checkPasswordNotEmptyRegister() {
+
+        let pass = $('#input-password-reg').val();
+        let confirmPass = $('#input-confirm-password-reg').val();
+
+        if(pass === "" || confirmPass == "") {
+            $('#passwd-empty-register').show(100);
+            $('#register-submit-btn').prop("disabled", true);
+        } else {
+            $('#passwd-empty-register').hide(100);
+            $('#register-submit-btn').prop("disabled", false);
+        }
+    }
+
+
+    function checkPasswordNotEmptyLogin() {
+        
+        let pass = $('#input-password-login').val();
+
+        if(pass === "") {
+            $('#passwd-empty-login').show(100);
+            $('#login-submit-btn').prop("disabled", true);
+        } else {
+            $('#passwd-empty-login').hide(100);
+            $('#login-submit-btn').prop("disabled", false);
         }
     }
 
