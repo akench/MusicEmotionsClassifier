@@ -10,6 +10,8 @@
 .overview-section {
     padding: 50px 100px 100px 100px;
     background-color: #B5C2B7;
+    z-index: 50;
+    box-shadow: 5px 5px 20px rgb(97, 96, 96);
 }
 
 .login-section {
@@ -37,6 +39,7 @@
     border-style: groove;
     border-radius: 20px;
     background-color: #B5C2B7;
+    box-shadow: 30px 20px 20px rgb(85, 84, 84);
 }
 
 .auth-err {
@@ -45,6 +48,35 @@
     margin-bottom: 10px;
 }
 
+.features-item {
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 10px;
+
+    padding: 10px 10px 10px 10px;
+    margin-bottom: 10px;
+
+    box-shadow: 10px 10px 25px gray;
+    z-index: 100;
+    background-color: #8C93A8;
+}
+
+.features-img {
+    border-radius: 10px;
+    height: 100px;
+}
+
+.features-desc {
+    margin-left: 20px;
+    font-weight: bold;
+    font-family: monospace;
+}
+
+.center-flex {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
 #register-submit-btn, #login-submit-btn {
     background-color: #732C7B;

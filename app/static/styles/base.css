@@ -33,6 +33,7 @@ footer {
     background-color: rgb(149, 149, 149);
     border-radius: 5px;
     font-family: monospace;
+    z-index: 1000;
 }
 
 #nav-project-name {
