@@ -20,7 +20,6 @@ cur = conn.cursor(pymysql.cursors.DictCursor)
 # classify url route
 @mod.route('/classify', methods=['POST'])
 def classify():
-    session.modified = True
     url = request.json['url']
     emot = classify_emotion(url)
 
@@ -30,7 +29,6 @@ def classify():
 # register route
 @mod.route('/register', methods=['POST'])
 def register():
-
     data = request.json
     email = data.get('email', None)
     password = data.get('password', None)
