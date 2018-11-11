@@ -1,4 +1,4 @@
-from flask import render_template, Blueprint, request, abort, redirect, url_for, session
+from flask import render_template, Blueprint, request, abort, redirect, url_for, session, flash
 import json
 import pymysql
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -93,5 +93,10 @@ def login():
         return "5"
 
         
+@mod.route('/logout', methods=['GET'])
+def logout():
 
+    session.pop('user')
 
+    flash('You have been logged out', 'success')
+    return redirect(url_for('pages.home_page'))

@@ -4,24 +4,24 @@ mod = Blueprint('pages', __name__)
 
 @mod.route('/', methods=['GET'])
 def home_page():
+    # render the home page
     return render_template('home.html')
 
 
 @mod.route('/about', methods=['GET'])
 def about_page():
+    # render the about page
     return render_template('about.html')
+
 
 @mod.route('/dashboard', methods=['GET'])
 def dashboard_page():
-    email = session.get('user', None)
-
-    if email:
+    # if the user's session exists, render the dashboard
+    if 'user' in session:
         flash("Successfully logged in!", "success")
-        return render_template('dashboard.html', email=email)
+        return render_template('dashboard.html')
+    # otherwise redirect to the login page and flash an error
     else:
         flash("Access unauthorized. Please login first.", "error")
         return redirect(url_for('pages.home_page'))
 
-@mod.route('/testpage')
-def test():
-    return render_template('test.html')

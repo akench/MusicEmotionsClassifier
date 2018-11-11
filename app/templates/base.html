@@ -18,6 +18,7 @@
         crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" media="screen" href="/static/styles/base.css" />
 
+    <!-- a page will inject any CSS -->
     {% block head %} {% endblock %}
 
     <script type="text/javascript" src="/static/scripts/main.js" async></script>
@@ -28,11 +29,20 @@
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #62466B;">
 
-            <a id="nav-project-name" class="navbar-brand" href="/">
-                <img src="http://www.stickpng.com/assets/images/5a02cab818e87004f1ca43d9.png" width="40" height="40"
+            <!-- if user is logged in, the image leads to dashboard, otherwise to login page -->
+            {% if session.user %}
+            <a id="nav-project-name" class="navbar-brand" href="/dashboard">
+                <img src="/static/resources/music_note.png" width="40" height="40"
                     alt="">
                 Music Emotions Classifier
             </a>
+            {% else %}
+            <a id="nav-project-name" class="navbar-brand" href="/">
+                <img src="/static/resources/music_note.png" width="40" height="40"
+                    alt="">
+                Music Emotions Classifier
+            </a>
+            {% endif %}
 
             <ul class="nav navbar-nav" style="margin-left: auto;">
                 <li class="nav-item">
@@ -42,9 +52,9 @@
                     <a class="nav-link" href="/pricing">Pricing</a>
                 </li>
                 {% if session.user %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="/logout">Logout</a>
-                    </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout">Logout</a>
+                </li>
                 {% endif %}
             </ul>
         </nav>
@@ -57,10 +67,10 @@
                 {% for category, message in messages %}
 
                     {% if category == "error" %}
-                        <div class="alert alert-danger">{{ message }}</div>
+                    <div class="alert alert-danger">{{ message }}</div>
                     {% endif %}
                     {% if category == "success" %}
-                        <div class="alert alert-success">{{ message }}</div>
+                    <div class="alert alert-success">{{ message }}</div>
                     {% endif %}
 
                 {% endfor %}
@@ -69,7 +79,9 @@
     </header>
 
 
-    {% block body %} {% endblock %}
+    <div class="page-content">
+        {% block body %} {% endblock %}
+    </div>
 
 </body>
 
