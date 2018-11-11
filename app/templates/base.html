@@ -41,6 +41,11 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/pricing">Pricing</a>
                 </li>
+                {% if session.user %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Logout</a>
+                    </li>
+                {% endif %}
             </ul>
         </nav>
 
@@ -57,7 +62,7 @@
                     {% if category == "success" %}
                         <div class="alert alert-success">{{ message }}</div>
                     {% endif %}
-                    
+
                 {% endfor %}
             {% endif %}
         {% endwith %}
@@ -70,7 +75,7 @@
 
 
 <footer>
-    <p>Created using Flask, TensorFlow, JavaScript, HTML/CSS</p>
+    <p>Created using Flask, TensorFlow, JavaScript, and HTML/CSS</p>
 </footer>
 
 </html>
