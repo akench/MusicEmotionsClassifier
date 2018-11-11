@@ -4,8 +4,11 @@ mod = Blueprint('pages', __name__)
 
 @mod.route('/', methods=['GET'])
 def home_page():
-    # render the home page
-    return render_template('home.html')
+    # if user logged in, go to dashboard, otherwise go to login page
+    if 'user' in session:
+        return redirect(url_for('pages.dashboard_page'))
+    else:
+        return render_template('home.html')
 
 
 @mod.route('/about', methods=['GET'])
