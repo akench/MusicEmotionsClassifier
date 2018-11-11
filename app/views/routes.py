@@ -75,6 +75,7 @@ def login():
 
         elif check_password_hash(row['password'], password):
             # login successful
+            session['user'] = email
             return "0"
         else:
             # wrong password

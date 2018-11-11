@@ -1,4 +1,4 @@
-from flask import render_template, Blueprint
+from flask import render_template, Blueprint, session, redirect, url_for, flash
 
 mod = Blueprint('pages', __name__)
 
@@ -14,8 +14,14 @@ def about_page():
 
 @mod.route('/dashboard', methods=['GET'])
 def dashboard_page():
-    return render_template('dashboard.html')
+    email = session.get('user', None)
 
+    if email:
+        flash("Successfully logged in!", "success")
+        return render_template('dashboard.html', email=email)
+    else:
+        flash("Access unauthorized. Please login first.", "error")
+        return redirect(url_for('pages.home_page'))
 
 @mod.route('/testpage')
 def test():
