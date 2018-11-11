@@ -15,3 +15,8 @@ def about_page():
 @mod.route('/dashboard', methods=['GET'])
 def dashboard_page():
     return render_template('dashboard.html')
+
+
+@mod.route('/testpage')
+def test():
+    return render_template('test.html')

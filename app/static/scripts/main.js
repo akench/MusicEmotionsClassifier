@@ -139,10 +139,15 @@
             data: JSON.stringify(payload),
             method: "POST",
             contentType: "application/json",
-            success: function(result) {
-                console.log(result);
+            success: function (response) {
+                console.log(response);
+
+                if (response == "0") {
+                    window.location.href = "/dashboard"
+                }
+                
             },
-            error: function(err) {
+            error: function (err) {
                 console.log(err);
             }
         });

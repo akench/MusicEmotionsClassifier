@@ -4,7 +4,7 @@ from flask_cors import CORS, cross_origin
 
 # initialize the flask application
 app = Flask(__name__)
-app.secret_key = 'secret123'
+app.secret_key = 'ifh0i2pk3[wg[e;fwoqjigw3uqbfaw'
 
 cors = CORS(app)
 

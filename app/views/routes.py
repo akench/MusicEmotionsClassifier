@@ -1,4 +1,4 @@
-from flask import render_template, Blueprint, request, abort
+from flask import render_template, Blueprint, request, abort, redirect, url_for, session
 import json
 import pymysql
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -89,6 +89,5 @@ def login():
         return "5"
 
         
-@mod.route('/testpage')
-def test():
-    return render_template('test.html')
+
+
