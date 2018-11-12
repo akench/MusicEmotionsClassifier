@@ -8,9 +8,6 @@
         inputVerificationLogin()
         inputVerificationRegister()
 
-        // click register btn
-        $('#register-submit-btn').on('click', sendRegisterData);
-
 
         // verify input for register pg
         $('#input-email-reg, #input-password-reg, #input-confirm-password-reg').on('change keyup mouseup', inputVerificationRegister);
@@ -44,6 +41,7 @@
         });
     }
 
+    
 
     function inputVerificationRegister() {
 
@@ -88,6 +86,8 @@
         }
     }
 
+
+
     function inputVerificationLogin() {
         let email = $('#input-email-login').val();
         let pass = $('#input-password-login').val();
@@ -120,66 +120,6 @@
             $('#login-submit-btn').prop("disabled", false);
         }
     }
-
-
-
-
-    // we know the passwords must be different
-    function sendRegisterData() {
-
-        let email = document.getElementById('input-email-reg').value;
-        let passwd = document.getElementById('input-password-reg').value;
-
-        let payload = { "email": email, "password": passwd };
-
-        $.ajax({
-            url: "http://localhost:5000/register",
-            data: JSON.stringify(payload),
-            method: "POST",
-            contentType: "application/json",
-            success: function (result) {
-
-                if (result !== "0") {
-                    let msg = codeToStr[result];
-
-                    // remove any success alerts, if there are any
-                    $('.alert-success').slideUp("fast");
-
-                    $('.alert-danger').empty();
-                    $('.alert-danger').slideUp("fast");
-                    $('.alert-danger').append(msg);
-                    $('.alert-danger').slideDown("slow");
-                } else {
-
-                    // remove any error alerts, if there are any
-                    $('.alert-danger').slideUp("fast");
-
-                    $('.alert-success').empty();
-                    $('.alert-success').slideUp("fast");
-                    $('.alert-success').append("You have successfully registered. Please log in.")
-                    $('.alert-success').slideDown("slow");
-
-                    // switches to login tab
-                    $('#login-tab-btn').trigger("click");
-
-                }
-
-            },
-            error: function (err) {
-                console.log(err);
-
-                // remove any success alerts, if there are any
-                $('.alert-success').slideUp("fast");
-
-                $('.alert-danger').empty();
-                $('.alert-danger').slideUp("fast");
-                $('.alert-danger').append("There was an unknown error. Please try again later");
-                $('.alert-danger').slideDown("slow");
-
-            }
-        });
-    }
-
 
 
 })();

@@ -29,13 +29,9 @@ def classify():
 # register route
 @mod.route('/register', methods=['POST'])
 def register():
-    data = request.json
-    email = data.get('email', None)
-    password = data.get('password', None)
 
-
-    if not email or not password:
-        return "6"
+    email = request.form['email']
+    password = request.form['password']
 
     hashed_pw = generate_password_hash(password)
 
@@ -52,9 +48,11 @@ def register():
 
         # email address already exists
         if code == 1062:
-            return "1"
+            flash('Invalid email address; A user with that email address already exists', 'error')
+            return redirect(url_for('pages.home_page'))
 
-    return "0"
+    flash('You have successfully registered. Please login.', 'success')
+    return redirect(url_for('pages.home_page'))
 
 
 
