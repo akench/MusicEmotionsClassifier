@@ -112,6 +112,8 @@ def classify_emotion(url):
     print('song is emot:', emot)
     # todo add to db
 
+    
+
 
 if __name__=='__main__':
     print(classify_emotion('https://www.youtube.com/watch?v=mF3DCa4TbD0'))

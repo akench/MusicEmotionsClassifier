@@ -2,7 +2,7 @@ from flask import render_template, Blueprint, request, abort, redirect, url_for,
 import json
 import pymysql
 from werkzeug.security import generate_password_hash, check_password_hash
-from multiprocessing import Process
+import multiprocessing as mp
 import os
 
 from app.classification import classify_emotion
@@ -24,7 +24,7 @@ cur = conn.cursor(pymysql.cursors.DictCursor)
 def classify():
     url = request.json['url']
 
-    proc = Process(target=classify_emotion, args=(url,))
+    proc = mp.Process(target=classify_emotion, args=(url,))
     # classify_emotion(url)
 
     proc.start()
