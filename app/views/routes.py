@@ -3,6 +3,7 @@ import json
 import pymysql
 from werkzeug.security import generate_password_hash, check_password_hash
 from multiprocessing import Process
+import os
 
 from app.classification import classify_emotion
 
@@ -22,7 +23,13 @@ cur = conn.cursor(pymysql.cursors.DictCursor)
 @mod.route('/classify', methods=['POST'])
 def classify():
     url = request.json['url']
-    classify_emotion(url)
+
+    proc = Process(target=classify_emotion, args=(url,))
+    # classify_emotion(url)
+
+    proc.start()
+
+    print("flask pid", os.getpid())
 
     return "success"
 

@@ -71,20 +71,31 @@ def predict_class(youtube_link):
 
     print("SASASASASAS", youtube_link)
 
+    start1 = time.clock()
     try:
         dl_audio_path = dl_audio(youtube_link, None)
     except:
         return None
 
+    print("time to download audio: ", time.clock() - start1)
 
+
+    start2 = time.clock()
     specs_imgs = graph_spectrogram(dl_audio_path, save = False)
+    print("time to create imgs: ", time.clock() - start2)
+
+
     os.remove(dl_audio_path)
 
     random.shuffle(specs_imgs)
 
     specs_imgs = specs_imgs[: int(len(specs_imgs) / 2)]
 
+    start3 = time.clock()
     perc = get_conf_per_class(specs_imgs)
+    print("time to feed through model: ", time.clock() - start3)
+
+
     print(perc)
     print('took %f seconds to predict.' % (time.time() - t0))
 
@@ -92,6 +103,10 @@ def predict_class(youtube_link):
 
 
 def classify_emotion(url):
+
+    print("child pid", os.getpid())
+    print("parent pid", os.getppid())
+
     emot = label_to_emot[predict_class(url)]
 
     print('song is emot:', emot)
