@@ -49,6 +49,7 @@ def percentify(x):
 
 def get_conf_per_class(spec_list):
 
+    # sad 0, happy 1, angry 4
     label_list = [0, 0, 0, 0, 0, 0]
     graph = load_graph('/home/akench/Desktop/output_graph.pb')
 
@@ -68,6 +69,7 @@ def predict_class(youtube_link):
 
     t0 = time.time()
 
+    print("SASASASASAS", youtube_link)
 
     try:
         dl_audio_path = dl_audio(youtube_link, None)
@@ -90,8 +92,10 @@ def predict_class(youtube_link):
 
 
 def classify_emotion(url):
+    emot = label_to_emot[predict_class(url)]
 
-    return label_to_emot[predict_class(url)]
+    print('song is emot:', emot)
+    # todo add to db
 
 
 if __name__=='__main__':

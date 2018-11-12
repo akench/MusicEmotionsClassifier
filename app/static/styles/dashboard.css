@@ -1,0 +1,24 @@
+.library-section {
+    background-color: #8C93A8;
+    padding-top: 60px;
+}
+
+.video-section {
+    background-color: #B5C2B7;
+    padding-top: 60px;
+    text-align: center;
+}
+
+#add-song-input {
+    background-color: rgb(182, 186, 201);
+}
+
+#add-song-btn {
+    background-color: #732C7B;
+    color: white;
+}
+
+#video {
+    margin: 10px 0px 20px 0px;
+
+}

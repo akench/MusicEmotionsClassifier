@@ -6,6 +6,37 @@
 
 {% block body %}
 
-<h1>hi {{session.user}}</h1>
 
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-md-7 library-section">
+            <h2>test</h2>
+            <h2>test</h2>
+            <h2>test</h2>
+            <h2>test</h2>
+            <h2>test</h2>
+            <h2>test</h2>
+            <h2>test</h2>
+            <h2>test</h2>
+        </div>
+
+        <div class="col-md-5 video-section">
+            
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <button id="add-song-btn" class="btn btn-outline-primary" type="button">Add song</button>
+                </div>
+                <input type="text" id="add-song-input" class="form-control" placeholder="Enter youtube URL">
+            </div>
+
+            <iframe id="video" src="https://www.youtube.com/embed/oHg5SJYRHA0" width="500" height="300" frameborder="0"></iframe>
+
+        </div>
+
+    </div>
+
+</div>
+
+<h1>hi {{session.user}}</h1>
 {% endblock %}

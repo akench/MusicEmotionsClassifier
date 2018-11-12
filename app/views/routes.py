@@ -2,6 +2,7 @@ from flask import render_template, Blueprint, request, abort, redirect, url_for,
 import json
 import pymysql
 from werkzeug.security import generate_password_hash, check_password_hash
+from multiprocessing import Process
 
 from app.classification import classify_emotion
 
@@ -21,9 +22,9 @@ cur = conn.cursor(pymysql.cursors.DictCursor)
 @mod.route('/classify', methods=['POST'])
 def classify():
     url = request.json['url']
-    emot = classify_emotion(url)
+    classify_emotion(url)
 
-    return json.dumps(emot)
+    return "success"
 
 
 # register route

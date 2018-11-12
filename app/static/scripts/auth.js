@@ -17,8 +17,8 @@
 
 
         // set up click listener to send url to server
-        // let urlbox = $("#url-box");
-        // $("#submit-url").on('click', urlbox, submitURL);
+        let urlbox = $("#add-song-input");
+        $("#add-song-btn").on('click', urlbox, submitURL);
 
     });
 
@@ -41,7 +41,7 @@
         });
     }
 
-    
+
 
     function inputVerificationRegister() {
 

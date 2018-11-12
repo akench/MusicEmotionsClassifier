@@ -1,0 +1,6 @@
+
+db connection pool 
+spawn process to get emotion
+spawn process to send each img through model (thread pool)
+
+fix issue with youtube dl not working randomly
