@@ -4,13 +4,9 @@
 
     $(document).ready(function () {
 
-        // initially tells you that email is empty, since it is
-        checkEmailNotEmptyLogin();
-        checkEmailNotEmptyRegister();
-
-        // same for password
-        checkPasswordNotEmptyLogin();
-        checkPasswordNotEmptyRegister();
+        // do some initial input verf
+        inputVerificationLogin()
+        inputVerificationRegister()
 
         // click register btn
         $('#register-submit-btn').on('click', sendRegisterData);
@@ -18,16 +14,12 @@
         // click login btn
         $('#login-submit-btn').on('click', sendLoginData);
 
-        // do passwords match for registering?
-        $('#input-password-reg, #input-confirm-password-reg').on('change keyup mouseup', checkPasswordsMatch);
+        // verify input for register pg
+        $('#input-email-reg, #input-password-reg, #input-confirm-password-reg').on('change keyup mouseup', inputVerificationRegister);
 
-        // did you leave any password fields blank?
-        $('#input-password-reg, #input-confirm-password-reg').on('change keyup mouseup', checkPasswordNotEmptyRegister);
-        $('#input-password-login').on('change keyup mouseup', checkPasswordNotEmptyLogin);
+        // verify input for login pg
+        $('#input-email-login, #input-password-login').on('change keyup mouseup', inputVerificationLogin);
 
-        // did you leave any email fields blank?
-        $('#input-email-reg').on('change keyup mouseup', checkEmailNotEmptyRegister);
-        $('#input-email-login').on('change keyup mouseup', checkEmailNotEmptyLogin);
 
         // set up click listener to send url to server
         // let urlbox = $("#url-box");
@@ -52,75 +44,81 @@
                 alert(err.statustext);
             }
         });
-
     }
 
-    function checkEmailNotEmptyRegister(keyevent) {
-        let email = (keyevent) ? keyevent.target.value : "";
 
-        if (email === "") {
-            $('#email-empty-register').show(100);
+    function inputVerificationRegister() {
+
+        let email = $('#input-email-reg').val();
+        let pass = $('#input-password-reg').val();
+        let confPass = $('#input-confirm-password-reg').val();
+
+        let emailBlank = (email === "");
+        let passBlank = (pass === "" || confPass === "");
+        let passNotMatch = (pass !== confPass);
+
+        // if there is some problem disable the button
+        if (emailBlank || passBlank || passNotMatch) {
+
+            // if email is blank
+            if (emailBlank) {
+                $('#email-empty-register').show(100);
+            } else {
+                $('#email-empty-register').hide(100);
+            }
+            // if either password is blank
+            if (passBlank) {
+                $('#passwd-empty-register').show(100);
+            } else {
+                $('#passwd-empty-register').hide(100);
+            }
+            // if passwords dont match and neither are blank
+            if (passNotMatch && !passBlank) {
+                $('#passwd-not-match').show(100);
+            } else {
+                $('#passwd-not-match').hide(100);
+            }
+
             $('#register-submit-btn').prop("disabled", true);
         } else {
+            // if no problems, hide everything and enable btn
             $('#email-empty-register').hide(100);
-            $('#register-submit-btn').prop("disabled", false);
-        }
-    }
-
-
-    function checkPasswordsMatch() {
-
-        let pass = $('#input-password-reg').val();
-        let confirmPass = $('#input-confirm-password-reg').val();
-
-        if (pass !== confirmPass) {
-            $('#passwd-not-match').show(100);
-            $('#register-submit-btn').prop("disabled", true);
-        } else {
-            $('#passwd-not-match').hide(100);
-            $('#register-submit-btn').prop("disabled", false);
-        }
-    }
-
-
-    function checkPasswordNotEmptyRegister() {
-
-        let pass = $('#input-password-reg').val();
-        let confirmPass = $('#input-confirm-password-reg').val();
-
-        if (pass === "" || confirmPass == "") {
-            $('#passwd-empty-register').show(100);
-            $('#register-submit-btn').prop("disabled", true);
-        } else {
             $('#passwd-empty-register').hide(100);
+            $('#passwd-not-match').hide(100);
+
             $('#register-submit-btn').prop("disabled", false);
         }
     }
 
-
-    function checkPasswordNotEmptyLogin() {
-
+    function inputVerificationLogin() {
+        let email = $('#input-email-login').val();
         let pass = $('#input-password-login').val();
 
-        if (pass === "") {
-            $('#passwd-empty-login').show(100);
+        let emailBlank = (email === "");
+        let passBlank = (pass === "");
+
+        // if there is some problem disable the button
+        if (emailBlank || passBlank) {
+
+            // if email is blank
+            if (emailBlank) {
+                $('#email-empty-login').show(100);
+            } else {
+                $('#email-empty-login').hide(100);
+            }
+            // if password is blank
+            if (passBlank) {
+                $('#passwd-empty-login').show(100);
+            } else {
+                $('#passwd-empty-login').hide(100);
+            }
+
             $('#login-submit-btn').prop("disabled", true);
         } else {
-            $('#passwd-empty-login').hide(100);
-            $('#login-submit-btn').prop("disabled", false);
-        }
-    }
-
-
-
-    function checkEmailNotEmptyLogin(keyevent) {
-        let email = (keyevent) ? keyevent.target.value : "";
-
-        if (email === "") {
-            $('#email-empty-login').show(100);
-            $('#login-submit-btn').prop("disabled", true);
-        } else {
+            // if no problems, hide everything and enable btn
             $('#email-empty-login').hide(100);
+            $('#passwd-empty-login').hide(100);
+
             $('#login-submit-btn').prop("disabled", false);
         }
     }
@@ -145,7 +143,7 @@
                 if (response == "0") {
                     window.location.href = "/dashboard"
                 }
-                
+
             },
             error: function (err) {
                 console.log(err);
