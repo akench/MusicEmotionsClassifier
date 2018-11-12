@@ -61,10 +61,8 @@ def register():
 # login route
 @mod.route('/login', methods=['POST'])
 def login():
-
-    data = request.json
-    email = data['email']
-    password = data['password']
+    email = request.form['email']
+    password = request.form['password']
 
     query = "SELECT * FROM users where email='%s';" % email
 
@@ -74,23 +72,26 @@ def login():
 
         # user not found
         if row is None or len(row) == 0:
-            return "4"
+            flash('User not found.', 'error')
+            return redirect(url_for('pages.home_page'))
 
         elif check_password_hash(row['password'], password):
             # login successful
             session['user'] = email
-            return "0"
+            return redirect(url_for('pages.dashboard_page'))
         else:
             # wrong password
-            return "3"
+            flash('Invalid password...', 'error')
+            return redirect(url_for('pages.home_page'))
     
     except pymysql.IntegrityError as err:
         # pylint: disable=unbalanced-tuple-unpacking
         code, msg = err.args
 
         print("login err code %s: %s" % (code, msg))
+        flash('Unknown error. Please try again later', 'error')
+        return redirect(url_for('pages.home_page'))
 
-        return "5"
 
         
 @mod.route('/logout', methods=['GET'])

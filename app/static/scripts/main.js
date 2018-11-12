@@ -11,8 +11,6 @@
         // click register btn
         $('#register-submit-btn').on('click', sendRegisterData);
 
-        // click login btn
-        $('#login-submit-btn').on('click', sendLoginData);
 
         // verify input for register pg
         $('#input-email-reg, #input-password-reg, #input-confirm-password-reg').on('change keyup mouseup', inputVerificationRegister);
@@ -121,35 +119,6 @@
 
             $('#login-submit-btn').prop("disabled", false);
         }
-    }
-
-
-
-    function sendLoginData() {
-
-        let email = document.getElementById('input-email-login').value;
-        let passwd = document.getElementById('input-password-login').value;
-
-        let payload = { "email": email, "password": passwd };
-
-        $.ajax({
-            url: "http://localhost:5000/login",
-            data: JSON.stringify(payload),
-            method: "POST",
-            contentType: "application/json",
-            success: function (response) {
-                console.log(response);
-
-                if (response == "0") {
-                    window.location.href = "/dashboard"
-                }
-
-            },
-            error: function (err) {
-                console.log(err);
-            }
-        });
-
     }
 
 
