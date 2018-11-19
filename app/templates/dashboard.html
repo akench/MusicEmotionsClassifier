@@ -2,6 +2,7 @@
 
 {% block head %}
 <link rel="stylesheet" href="/static/styles/dashboard.css">
+<script src="/static/scripts/dashboard.js"></script>
 {% endblock %}
 
 {% block body %}
@@ -28,7 +29,7 @@
                                 <div class="card-body">
                                     <ul style="list-style-type: none;">
                                         {% for song in songs[emot] %}
-                                            <li>{{ song.title }}</li>
+                                            <li onclick="$('#video').attr('src', '{{ song.url }}');">{{ song.title }}</li>
                                         {% endfor %}
                                     </ul>
                                 </div>
