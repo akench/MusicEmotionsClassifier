@@ -27,15 +27,21 @@
                             <div id="{{ emot }}" class="collapse" data-parent="#songs-viewer">
                                 <div class="card-body">
                                     <ul style="list-style-type: none;">
-                                        {% for url in songs[emot] %}
-                                            <li>{{ url }}</li>
+                                        {% for song in songs[emot] %}
+                                            <li>{{ song.title }}</li>
                                         {% endfor %}
                                     </ul>
                                 </div>
                             </div>
                         </div>
 
+                    {% else %}
+
+                        <h3>You have no songs in your library, try adding some to the right</h3>
+
                     {% endif %}
+
+
 
                 {% endfor %}
 

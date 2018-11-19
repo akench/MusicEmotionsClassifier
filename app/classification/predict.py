@@ -145,7 +145,12 @@ def classify_emotion(url, email, conn):
         conn: database connection object
     """
 
-    emot, title = predict_class(url)
+    args = predict_class(url)
+
+    if args is None:
+        return
+
+    emot, title = args
 
     # store embedded url in db
     url = url.replace('watch?v=', 'embed/')

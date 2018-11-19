@@ -25,17 +25,9 @@ def dashboard_page():
     if 'user' in session:
         flash("Successfully logged in as %s!" % session['user'], "success")
 
-        songs = {
-            "angry": [],
-            "happy": [],
-            "motivational": [],
-            "relaxing": [],
-            "sad": []
-        }
 
         email = session.get('user', None)
-        query = "SELECT songemotions.* FROM usersongs INNER JOIN songemotions ON usersongs.songurl=songemotions.songurl WHERE email='%s'" % email
-
+        query = "SELECT songemotions.* FROM usersongs INNER JOIN songemotions ON usersongs.songurl=songemotions.songurl WHERE email='%s';" % email
 
         conn = pymysql.connect(
             host="localhost",
@@ -47,9 +39,22 @@ def dashboard_page():
         cur = conn.cursor(pymysql.cursors.DictCursor)
         cur.execute(query)
 
+        songs = {}
         user_songs = cur.fetchall()
         for row in user_songs:
-            songs[row['emotion']].append(row['songurl'])
+            emot = row['emotion']
+            url = row['songurl']
+            title = row['title']
+
+            if emot not in songs:
+                songs[emot] = []
+
+            songs[emot].append(
+                {
+                    'url': url,
+                    'title': title
+                }
+            )
 
         return render_template('dashboard.html', songs=songs)
     # otherwise redirect to the login page and flash an error
