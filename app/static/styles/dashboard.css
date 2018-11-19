@@ -27,6 +27,10 @@
     margin: 10px 0px 10px 0px;
 }
 
+.show-vid-btn {
+    height: 40px;
+}
+
 #add-song-input {
     background-color: rgb(182, 186, 201);
 }

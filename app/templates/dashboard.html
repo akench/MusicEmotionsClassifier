@@ -7,6 +7,15 @@
 
 {% block body %}
 
+<script>
+
+    function changeVid(url) {
+        
+        $('#video').attr('src', url);
+    }
+
+</script>
+
 <div class="container-fluid">
 
     <div class="row">
@@ -27,7 +36,16 @@
                                 <div class="card-body">
                                     <ul style="list-style-type: none;">
                                         {% for song in songs[emot] %}
-                                            <li class="video-item" onclick="$('#video').attr('src', '{{ song.url }}');">{{ song.title }}</li>
+                                            <li class="video-item">
+                                                
+                                                {{ song.title }}
+
+                                                <button type="button" class="btn btn-default show-vid-btn" onclick="changeVid('{{ song.url }}')">
+                                                    <i class="material-icons">
+                                                        arrow_forward
+                                                    </i>
+                                                </button>
+                                            </li>
                                         {% endfor %}
                                     </ul>
                                 </div>
