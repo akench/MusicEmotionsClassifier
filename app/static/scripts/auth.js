@@ -28,7 +28,7 @@
         let url = event.data.val();
 
         $.ajax({
-            url: "http://localhost:5000/classify",
+            url: "http://localhost:5000/songs",
             method: "POST",
             data: JSON.stringify({ "url": url }),
             contentType: "application/json",

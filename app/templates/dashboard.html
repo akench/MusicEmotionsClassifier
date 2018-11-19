@@ -6,6 +6,25 @@
 
 {% block body %}
 
+<script>
+
+    $('document').ready(function() {
+
+        $.ajax({
+            url: "http://localhost:5000/songs",
+            method: "GET",
+            success: function(result) {
+                console.log(result)
+            },
+            error: function(err) {
+                console.log(err);
+            }
+        });
+
+    })
+
+</script>
+
 
 <div class="container-fluid">
 

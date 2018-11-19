@@ -9,6 +9,7 @@ import glob
 import numpy as np
 import time
 import random
+import pymysql
 
 
 label_to_emot = {0:'angry', 1:'happy', 2:'motivational', 3:'relaxing', 4:'sad'}
@@ -61,15 +62,12 @@ def get_conf_per_class(spec_list):
         lbl = inference([arr], graph)
         label_list[lbl] += 1
 
-    perc = percentify(label_list)
-    return perc
+    return label_list
 
 
 def predict_class(youtube_link):
 
     t0 = time.time()
-
-    print("SASASASASAS", youtube_link)
 
     start1 = time.clock()
     try:
@@ -96,24 +94,44 @@ def predict_class(youtube_link):
     print("time to feed through model: ", time.clock() - start3)
 
 
-    print(perc)
+    print(perc.tolist())
     print('took %f seconds to predict.' % (time.time() - t0))
 
     return np.argmax(perc)
 
 
-def classify_emotion(url):
+def classify_emotion(url, email, conn):
 
-    print("child pid", os.getpid())
-    print("parent pid", os.getppid())
+    class_index = predict_class(url)
 
-    emot = label_to_emot[predict_class(url)]
+    # store embedded url in db
+    url = url.replace('watch?v=', 'embed/')
+
+    # TODO work on persist errors using redis and show to user next time
+    # if there was some error in the classification, return 
+    if not class_index:
+        return 
+
+    emot = label_to_emot[class_index]
 
     print('song is emot:', emot)
-    # todo add to db
 
-    
+    try:
+        # get cursor object to execute queries
+        cur = conn.cursor(pymysql.cursors.DictCursor)
 
+        # add song and emotion to songemotions table
+        query = "INSERT INTO songemotions VALUES('%s', '%s');" % (url, emot)
+        cur.execute(query)
 
-if __name__=='__main__':
-    print(classify_emotion('https://www.youtube.com/watch?v=mF3DCa4TbD0'))
+        conn.commit()
+
+        # add the song to the usersongs table
+        query = "INSERT INTO usersongs VALUES('%s', '%s');" % (email, url)
+        cur.execute(query)
+
+        conn.commit()
+
+    except pymysql.IntegrityError as err:
+        print("error: ", err.args)
+

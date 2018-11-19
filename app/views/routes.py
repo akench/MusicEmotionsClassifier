@@ -3,6 +3,7 @@ import json
 import pymysql
 from werkzeug.security import generate_password_hash, check_password_hash
 import multiprocessing as mp
+from threading import Thread
 import os
 
 from app.classification import classify_emotion
@@ -20,18 +21,38 @@ conn = pymysql.connect(
 cur = conn.cursor(pymysql.cursors.DictCursor)
 
 # classify url route
-@mod.route('/classify', methods=['POST'])
+@mod.route('/songs', methods=['GET', 'POST'])
 def classify():
-    url = request.json['url']
 
-    proc = mp.Process(target=classify_emotion, args=(url,))
-    # classify_emotion(url)
+    if request.method == 'POST':
+        url = request.json['url']
+        email = session.get('user', None)
 
-    proc.start()
+        thread = Thread(target=classify_emotion, args=(url,email, conn))
+        thread.start()
 
-    print("flask pid", os.getpid())
+        return "success"
 
-    return "success"
+    elif request.method == 'GET':
+
+        payload = {
+            "angry": [],
+            "happy": [],
+            "motivational": [],
+            "relaxing": [],
+            "sad": []
+        }
+
+        email = session.get('user', None)
+        query = "SELECT songemotions.* FROM usersongs INNER JOIN songemotions ON usersongs.songurl=songemotions.songurl WHERE email='%s'" % email
+        cur.execute(query)
+
+        user_songs = cur.fetchall()
+        for row in user_songs:
+            payload[row['emotion']].append(row['songurl'])
+
+        print(payload)
+        return json.dumps(payload)
 
 
 # register route

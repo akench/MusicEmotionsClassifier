@@ -1,10 +1,15 @@
 users table
-col: email, password
+col: email (prim), password
 
 user song table
-col : email, songURL
+col : email (foreign), songURL (foreign)
 
 song type table
-col: songURL, emotion
+col: songURL (prim), emotion
 
 
+data {
+    happy : {url1, url2},
+    sad : {url3, url4},
+    ...
+}
