@@ -30,6 +30,13 @@ def load_graph(graph_file_path):
 
 
 def inference(data, graph):
+    """
+    Performs inference on a graph and returns logits for each class
+
+    Args:
+        data (nparray): spectrogram image in np array format
+        graph: tensorflow loaded graph
+    """
 
     # list_of_tuples = [op.values()[0] for op in graph.get_operations()]
     # print(list_of_tuples)
@@ -44,13 +51,23 @@ def inference(data, graph):
 
 
 def percentify(x):
-
     perc = (x / np.sum(x))
     return perc
 
-def get_conf_per_class(spec_list):
 
-    # sad 0, happy 1, angry 4
+def get_confidences(spec_list):
+    """
+    Passes the spectrogram images to model and gets the prediction
+    combines the prediction of all spectrogram images to get a list of confidence values
+
+    Args:
+        spec_list (list): list of PIL image objects of the spectrograms
+
+    Returns:
+        list: label list of the emotion of each spectrogram image, predicted from model
+    """
+
+    # sad 0, happy 1, ... angry 4
     label_list = [0, 0, 0, 0, 0, 0]
     graph = load_graph('/home/akench/Desktop/output_graph.pb')
 
@@ -65,14 +82,27 @@ def get_conf_per_class(spec_list):
     return label_list
 
 
-def predict_class(youtube_link):
+def predict_class(youtube_url):
+    """
+    Predicts the class of a youtube url by downloading the audio,
+    generating spectrogram images of the audio, then feeding it through the model
+
+    Args:
+        youtube_url (str): url to predict class of
+    
+    Returns:
+        str: emotion of song
+        str: title of youtube video 
+
+    """
 
     t0 = time.time()
 
     start1 = time.clock()
     try:
-        dl_audio_path = dl_audio(youtube_link, None)
+        dl_audio_path, title = dl_audio(youtube_url, None)
     except:
+        # if there was some error downloading, just return None
         return None
 
     print("time to download audio: ", time.clock() - start1)
@@ -90,47 +120,63 @@ def predict_class(youtube_link):
     specs_imgs = specs_imgs[: int(len(specs_imgs) / 2)]
 
     start3 = time.clock()
-    conf = get_conf_per_class(specs_imgs)
+    conf = get_confidences(specs_imgs)
     print("time to feed through model: ", time.clock() - start3)
 
     print(conf)
     print('took %f seconds to predict.' % (time.time() - t0))
 
-    return np.argmax(perc)
+    # index of the emotion according to the model
+    class_index = np.argmax(conf)
+    
+    # return the emotion and title
+    return label_to_emot[class_index], title
 
 
 def classify_emotion(url, email, conn):
+    """
+    Higher level method which classifies the emotion of a song
+    then adds the song to the songemotions table
+    and then adds the song to the usersongs table
 
-    class_index = predict_class(url)
+    Args:
+        url (str): youtube url of song
+        email (str): email address of the user to classify song for
+        conn: database connection object
+    """
+
+    emot, title = predict_class(url)
 
     # store embedded url in db
     url = url.replace('watch?v=', 'embed/')
 
     # TODO work on persist errors using redis and show to user next time
     # if there was some error in the classification, return 
-    if not class_index:
+    if emot is None:
         return 
 
-    emot = label_to_emot[class_index]
 
     print('song is emot:', emot)
 
+    # get cursor object to execute queries
+    cur = conn.cursor(pymysql.cursors.DictCursor)
+    # add song, title, emotion to songemotions table
     try:
-        # get cursor object to execute queries
-        cur = conn.cursor(pymysql.cursors.DictCursor)
-
-        # add song and emotion to songemotions table
-        query = "INSERT INTO songemotions VALUES('%s', '%s');" % (url, emot)
-        cur.execute(query)
-
-        conn.commit()
-
-        # add the song to the usersongs table
-        query = "INSERT INTO usersongs VALUES('%s', '%s');" % (email, url)
+        query = "INSERT INTO songemotions VALUES('%s', '%s', '%s');" % (url, title, emot)
         cur.execute(query)
 
         conn.commit()
 
     except pymysql.IntegrityError as err:
+        # if we get an integrity error, means that song is already in the table, so just add it to the user songs table next
         print("error: ", err.args)
+
+    # add the song to the usersongs table
+    try:
+        query = "INSERT INTO usersongs VALUES('%s', '%s');" % (email, url)
+        cur.execute(query)
+
+        conn.commit()
+    except Exception as err:
+        print(err)
 

@@ -13,6 +13,16 @@ import numpy as np
 almost_zero = 0.001
 
 def split_list_by_num_samples(data, num_samples):
+    """
+    converts a flat list of audio data to many groups of audio data, so each can be turned into a spectrogram
+
+    Args:
+        data (list): audio samples
+        num_samples (int): number of samples to have per list
+
+    Returns:
+        list of lists: containing the split data
+    """
 
     new = []
     index = 0
@@ -31,6 +41,18 @@ def get_wav_info(audio_file):
 
 
 def graph_spectrogram(audio_file, secs_per_spec = 10, save=True):
+    """
+    creates spectrograms using librosa library, given the audio file path and the number of seconds to have per spectrogram
+    if also saving spectrogram, will save in `gen_specs` folder, otherwise will return the PIL image object
+
+    Args:
+        audio_file (str): file path to the audio file which should be converted to spectrograms
+        secs_per_spec (int): the number of seconds from the audio file to be displayed in the spectrogram
+        save (bool): whether or not to save the spectrogram
+
+    Returns:
+        if save is False, will return the list of spectrogram image objects, otherwise no return
+    """
 
     if save:
         vid_id = audio_file.split('/')[-1].split('.')[0]
@@ -94,6 +116,13 @@ def graph_spectrogram(audio_file, secs_per_spec = 10, save=True):
 
 
 def all_audio_to_spec(audio_dir):
+    """
+    Used to get the dataset to train TF model on
+    converts all fils in audio directory to spectrograms
+
+    Args:
+        audio_dir (str): directory where all audio files are kept, split by emotion
+    """
     import glob
     audio = glob.glob(audio_dir + '/*.mp3')
 

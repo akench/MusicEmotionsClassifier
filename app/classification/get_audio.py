@@ -32,6 +32,5 @@ def dl_audio(url, emot, save = True):
 		# ydl.download([url])
 		info_dict = ydl.extract_info(url)
 		title = info_dict.get('title', None)
-		print("TITLE:::::::::::::::::", title)
 
-	return outfile + '.mp3'
+	return (outfile + '.mp3', title)
