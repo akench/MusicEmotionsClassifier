@@ -19,17 +19,15 @@
                     {% if songs[emot]|length > 0 %}
 
                         <div class="card">
-                            <div class="card-header">
-                                <a href="#{{ emot }}" class="card-link" data-toggle="collapse">
+                            <div class="card-header card-link" href="#{{emot}}" data-toggle="collapse">
                                     {{ emot }}
-                                </a>
                             </div>
 
                             <div id="{{ emot }}" class="collapse" data-parent="#songs-viewer">
                                 <div class="card-body">
                                     <ul style="list-style-type: none;">
                                         {% for song in songs[emot] %}
-                                            <li onclick="$('#video').attr('src', '{{ song.url }}');">{{ song.title }}</li>
+                                            <li class="video-item" onclick="$('#video').attr('src', '{{ song.url }}');">{{ song.title }}</li>
                                         {% endfor %}
                                     </ul>
                                 </div>
@@ -41,7 +39,6 @@
                         <h3>You have no songs in your library, try adding some to the right</h3>
 
                     {% endif %}
-
 
 
                 {% endfor %}
@@ -58,7 +55,7 @@
                 <input type="text" id="add-song-input" class="form-control" placeholder="Enter youtube URL">
             </div>
 
-            <iframe id="video" src="https://www.youtube.com/embed/oHg5SJYRHA0" width="500" height="300" frameborder="0"></iframe>
+            <iframe id="video" src="" width="500" height="300" frameborder="0"></iframe>
 
         </div>
 

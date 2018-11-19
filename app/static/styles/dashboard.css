@@ -9,6 +9,24 @@
     text-align: center;
 }
 
+.card-header {
+    background-color: #732C7B;
+}
+
+.card-link {
+    color: white;
+    text-transform: capitalize;
+}
+
+.card-body {
+    background-color: rgb(236, 241, 237);
+}
+
+.video-item {
+    font-size: 20px;
+    margin: 10px 0px 10px 0px;
+}
+
 #add-song-input {
     background-color: rgb(182, 186, 201);
 }
