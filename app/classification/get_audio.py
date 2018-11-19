@@ -29,6 +29,9 @@ def dl_audio(url, emot, save = True):
 	    'outtmpl': outfile + '.%(ext)s'
 	}
 	with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-		ydl.download([url])
+		# ydl.download([url])
+		info_dict = ydl.extract_info(url)
+		title = info_dict.get('title', None)
+		print("TITLE:::::::::::::::::", title)
 
 	return outfile + '.mp3'

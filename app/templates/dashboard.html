@@ -26,9 +26,11 @@
 
                             <div id="{{ emot }}" class="collapse" data-parent="#songs-viewer">
                                 <div class="card-body">
-                                    {% for url in songs[emot] %}
-                                        {{ url }}
-                                    {% endfor %}
+                                    <ul style="list-style-type: none;">
+                                        {% for url in songs[emot] %}
+                                            <li>{{ url }}</li>
+                                        {% endfor %}
+                                    </ul>
                                 </div>
                             </div>
                         </div>

@@ -90,11 +90,10 @@ def predict_class(youtube_link):
     specs_imgs = specs_imgs[: int(len(specs_imgs) / 2)]
 
     start3 = time.clock()
-    perc = get_conf_per_class(specs_imgs)
+    conf = get_conf_per_class(specs_imgs)
     print("time to feed through model: ", time.clock() - start3)
 
-
-    print(perc.tolist())
+    print(conf)
     print('took %f seconds to predict.' % (time.time() - t0))
 
     return np.argmax(perc)
