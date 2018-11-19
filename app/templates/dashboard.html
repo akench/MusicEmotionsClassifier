@@ -8,15 +8,15 @@
 
 <script>
 
-    $('document').ready(function() {
+    $('document').ready(function () {
 
         $.ajax({
             url: "http://localhost:5000/songs",
             method: "GET",
-            success: function(result) {
+            success: function (result) {
                 console.log(result)
             },
-            error: function(err) {
+            error: function (err) {
                 console.log(err);
             }
         });
@@ -30,18 +30,53 @@
 
     <div class="row">
         <div class="col-md-7 library-section">
-            <h2>test</h2>
-            <h2>test</h2>
-            <h2>test</h2>
-            <h2>test</h2>
-            <h2>test</h2>
-            <h2>test</h2>
-            <h2>test</h2>
-            <h2>test</h2>
+
+            <div id="accordion">
+
+                <div class="card">
+                    <div class="card-header">
+                        <a class="card-link" data-toggle="collapse" href="#collapseOne">
+                            Collapsible Group Item #1
+                        </a>
+                    </div>
+                    <div id="collapseOne" class="collapse show" data-parent="#accordion">
+                        <div class="card-body">
+                            Lorem ipsum..
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <a class="collapsed card-link" data-toggle="collapse" href="#collapseTwo">
+                            Collapsible Group Item #2
+                        </a>
+                    </div>
+                    <div id="collapseTwo" class="collapse" data-parent="#accordion">
+                        <div class="card-body">
+                            Lorem ipsum..
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <a class="collapsed card-link" data-toggle="collapse" href="#collapseThree">
+                            Collapsible Group Item #3
+                        </a>
+                    </div>
+                    <div id="collapseThree" class="collapse" data-parent="#accordion">
+                        <div class="card-body">
+                            Lorem ipsum..
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
 
         <div class="col-md-5 video-section">
-            
+
             <div class="input-group mb-3">
                 <div class="input-group-prepend">
                     <button id="add-song-btn" class="btn btn-outline-primary" type="button">Add song</button>
