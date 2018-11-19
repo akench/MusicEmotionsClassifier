@@ -33,26 +33,7 @@ def classify():
 
         return "success"
 
-    elif request.method == 'GET':
 
-        payload = {
-            "angry": [],
-            "happy": [],
-            "motivational": [],
-            "relaxing": [],
-            "sad": []
-        }
-
-        email = session.get('user', None)
-        query = "SELECT songemotions.* FROM usersongs INNER JOIN songemotions ON usersongs.songurl=songemotions.songurl WHERE email='%s'" % email
-        cur.execute(query)
-
-        user_songs = cur.fetchall()
-        for row in user_songs:
-            payload[row['emotion']].append(row['songurl'])
-
-        print(payload)
-        return json.dumps(payload)
 
 
 # register route

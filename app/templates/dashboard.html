@@ -6,71 +6,36 @@
 
 {% block body %}
 
-<script>
-
-    $('document').ready(function () {
-
-        $.ajax({
-            url: "http://localhost:5000/songs",
-            method: "GET",
-            success: function (result) {
-                console.log(result)
-            },
-            error: function (err) {
-                console.log(err);
-            }
-        });
-
-    })
-
-</script>
-
-
 <div class="container-fluid">
 
     <div class="row">
         <div class="col-md-7 library-section">
 
-            <div id="accordion">
+            <div id="songs-viewer">
 
-                <div class="card">
-                    <div class="card-header">
-                        <a class="card-link" data-toggle="collapse" href="#collapseOne">
-                            Collapsible Group Item #1
-                        </a>
-                    </div>
-                    <div id="collapseOne" class="collapse show" data-parent="#accordion">
-                        <div class="card-body">
-                            Lorem ipsum..
-                        </div>
-                    </div>
-                </div>
+                {% for emot in songs %}
 
-                <div class="card">
-                    <div class="card-header">
-                        <a class="collapsed card-link" data-toggle="collapse" href="#collapseTwo">
-                            Collapsible Group Item #2
-                        </a>
-                    </div>
-                    <div id="collapseTwo" class="collapse" data-parent="#accordion">
-                        <div class="card-body">
-                            Lorem ipsum..
-                        </div>
-                    </div>
-                </div>
+                    {% if songs[emot]|length > 0 %}
 
-                <div class="card">
-                    <div class="card-header">
-                        <a class="collapsed card-link" data-toggle="collapse" href="#collapseThree">
-                            Collapsible Group Item #3
-                        </a>
-                    </div>
-                    <div id="collapseThree" class="collapse" data-parent="#accordion">
-                        <div class="card-body">
-                            Lorem ipsum..
+                        <div class="card">
+                            <div class="card-header">
+                                <a href="#{{ emot }}" class="card-link" data-toggle="collapse">
+                                    {{ emot }}
+                                </a>
+                            </div>
+
+                            <div id="{{ emot }}" class="collapse" data-parent="#songs-viewer">
+                                <div class="card-body">
+                                    {% for url in songs[emot] %}
+                                        {{ url }}
+                                    {% endfor %}
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
+
+                    {% endif %}
+
+                {% endfor %}
 
             </div>
         </div>
