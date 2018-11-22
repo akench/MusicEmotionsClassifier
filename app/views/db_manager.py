@@ -17,14 +17,38 @@ except Exception as e:
     exit()
 
 
-def add_new_user(email, password):
+def get_password_for_user(email):
+
+    conn = connection_pool.get_connection()
+    cur = conn.cursor(dictionary=True)
+
+    query = "SELECT * FROM users where email='%s';" % email
+    password = None
+    errno = 0
+    try:
+        cur.execute(query)
+        row = cur.fetchone()
+
+        # if the row is not null and its not 0 length
+        if row and len(row):
+            password = row['password']
+    except mysql.connector.Error as err:
+        print("login err: {}".format(err))
+        errno = err.no
+    finally:
+        conn.close()
+
+    return password, errno
+
+
+def insert_user(email, password):
     
-    query = "INSERT INTO users VALUES('%s', '%s');" % (email, password)
 
     # get a connection from the pool and get a dictionary cursor
     conn = connection_pool.get_connection()
     cur = conn.cursor(dictionary=True)
 
+    query = "INSERT INTO users VALUES('%s', '%s');" % (email, password)
     try:
         cur.execute(query)
         conn.commit()

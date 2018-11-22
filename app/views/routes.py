@@ -4,7 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import multiprocessing as mp
 from threading import Thread
 import os
-from app.views.db_manager import add_new_user
+from app.views.db_manager import insert_user, get_password_for_user
 
 from app.classification import classify_emotion
 
@@ -37,7 +37,7 @@ def register():
     password = request.form['password']
     hashed_pw = generate_password_hash(password)
 
-    err_code = add_new_user(email, hashed_pw)
+    err_code = insert_user(email, hashed_pw)
 
     if err_code == 0:
         flash('You have successfully registered. Please login.', 'success')
@@ -55,34 +55,26 @@ def login():
     email = request.form['email']
     password = request.form['password']
 
-    query = "SELECT * FROM users where email='%s';" % email
+    saved_password, errno = get_password_for_user(email)
 
-    try:
-        cur.execute(query)
-        row = cur.fetchone()
-
-        # user not found
-        if row is None or len(row) == 0:
-            flash('User not found.', 'error')
-            return redirect(url_for('pages.home_page'))
-
-        elif check_password_hash(row['password'], password):
-            # login successful
-            session['user'] = email
-            return redirect(url_for('pages.dashboard_page'))
-        else:
-            # wrong password
-            flash('Invalid password...', 'error')
-            return redirect(url_for('pages.home_page'))
-    
-    except pymysql.IntegrityError as err:
-        # pylint: disable=unbalanced-tuple-unpacking
-        code, msg = err.args
-
-        print("login err code %s: %s" % (code, msg))
-        flash('Unknown error. Please try again later', 'error')
+    if errno != 0:
+        # if there was an error
+        flash('Unknown error. Error code %d' % errno, 'error')
         return redirect(url_for('pages.home_page'))
 
+    if saved_password is None:
+        flash('User not found', 'error')
+        return redirect(url_for('pages.home_page'))
+
+    elif check_password_hash(saved_password, password):
+        # login successful
+        session['user'] = email
+        return redirect(url_for('pages.dashboard_page'))
+
+    else:
+        # wrong password
+        flash('Password is incorrect', 'error')
+        return redirect(url_for('pages.home_page'))
 
         
 @mod.route('/logout', methods=['GET'])
