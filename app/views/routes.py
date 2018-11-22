@@ -1,24 +1,17 @@
 from flask import render_template, Blueprint, request, abort, redirect, url_for, session, flash
 import json
-import pymysql
 from werkzeug.security import generate_password_hash, check_password_hash
 import multiprocessing as mp
 from threading import Thread
 import os
+from app.views.db_manager import add_new_user
 
 from app.classification import classify_emotion
 
 
 mod = Blueprint('routes', __name__)
 
-conn = pymysql.connect(
-    host="localhost",
-    user="testuser",
-    password="password",
-    db="musicemotions"
-)
-
-cur = conn.cursor(pymysql.cursors.DictCursor)
+# cur = conn.cursor(pymysql.cursors.DictCursor)
 
 # classify url route
 @mod.route('/songs', methods=['GET', 'POST'])
@@ -42,28 +35,18 @@ def register():
 
     email = request.form['email']
     password = request.form['password']
-
     hashed_pw = generate_password_hash(password)
 
-    query = "INSERT INTO users VALUES('%s', '%s');" % (email, hashed_pw)
+    err_code = add_new_user(email, hashed_pw)
 
-    try:
-        cur.execute(query)
-        conn.commit()
-    except pymysql.IntegrityError as err:
-        # pylint: disable=unbalanced-tuple-unpacking
-        code, msg = err.args
+    if err_code == 0:
+        flash('You have successfully registered. Please login.', 'success')
+    elif err_code == 1062:
+        flash('Invalid email address; A user with that email address already exists', 'error')
+    else:
+        flash('Unknown Error, please try again later')
 
-        print("register err code: %s: %s" % (code, msg))
-
-        # email address already exists
-        if code == 1062:
-            flash('Invalid email address; A user with that email address already exists', 'error')
-            return redirect(url_for('pages.home_page'))
-
-    flash('You have successfully registered. Please login.', 'success')
     return redirect(url_for('pages.home_page'))
-
 
 
 # login route
