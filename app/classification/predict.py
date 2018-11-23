@@ -9,7 +9,7 @@ import glob
 import numpy as np
 import time
 import random
-import pymysql
+from app.views.db_manager import insert_song, insert_user_song
 
 
 label_to_emot = {0:'angry', 1:'happy', 2:'motivational', 3:'relaxing', 4:'sad'}
@@ -133,7 +133,7 @@ def predict_class(youtube_url):
     return label_to_emot[class_index], title
 
 
-def classify_emotion(url, email, conn):
+def classify_emotion(url, email):
     """
     Higher level method which classifies the emotion of a song
     then adds the song to the songemotions table
@@ -142,7 +142,6 @@ def classify_emotion(url, email, conn):
     Args:
         url (str): youtube url of song
         email (str): email address of the user to classify song for
-        conn: database connection object
     """
 
     args = predict_class(url)
@@ -160,28 +159,11 @@ def classify_emotion(url, email, conn):
     if emot is None:
         return 
 
-
     print('song is emot:', emot)
 
-    # get cursor object to execute queries
-    cur = conn.cursor(pymysql.cursors.DictCursor)
-    # add song, title, emotion to songemotions table
-    try:
-        query = "INSERT INTO songemotions VALUES('%s', '%s', '%s');" % (url, title, emot)
-        cur.execute(query)
+    # save the songs emotion
+    insert_song(url, title, emot)
 
-        conn.commit()
-
-    except pymysql.IntegrityError as err:
-        # if we get an integrity error, means that song is already in the table, so just add it to the user songs table next
-        print("error: ", err.args)
-
-    # add the song to the usersongs table
-    try:
-        query = "INSERT INTO usersongs VALUES('%s', '%s');" % (email, url)
-        cur.execute(query)
-
-        conn.commit()
-    except Exception as err:
-        print(err)
+    # mark this song as part of this user's library
+    insert_user_song(email, url)
 

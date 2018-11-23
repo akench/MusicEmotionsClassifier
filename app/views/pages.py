@@ -1,5 +1,6 @@
 from flask import render_template, Blueprint, session, redirect, url_for, flash
 import pymysql
+from app.views.db_manager import get_songs_for_user
 
 mod = Blueprint('pages', __name__)
 
@@ -25,39 +26,52 @@ def dashboard_page():
     if 'user' in session:
         flash("Successfully logged in as %s!" % session['user'], "success")
 
-
         email = session.get('user', None)
-        query = "SELECT songemotions.* FROM usersongs INNER JOIN songemotions ON usersongs.songurl=songemotions.songurl WHERE email='%s';" % email
 
-        conn = pymysql.connect(
-            host="localhost",
-            user="testuser",
-            password="password",
-            db="musicemotions"
-        )
+        if email is not None:
+            rows, errno = get_songs_for_user(email)
 
-        cur = conn.cursor(pymysql.cursors.DictCursor)
-        cur.execute(query)
-
-        songs = {}
-        user_songs = cur.fetchall()
-        for row in user_songs:
-            emot = row['emotion']
-            url = row['songurl']
-            title = row['title']
-
-            if emot not in songs:
-                songs[emot] = []
-
-            songs[emot].append(
-                {
-                    'url': url,
-                    'title': title
-                }
-            )
-
-        return render_template('dashboard.html', songs=songs)
-    # otherwise redirect to the login page and flash an error
+            # check if there was an error
+            if errno != 0:
+                flash("There was an unknown error getting your song library", "error")
+                return render_template('dashboard.html', songs={})
+            else:
+                organized_songs = organize_songs_by_emot(rows)
+                return render_template('dashboard.html', songs=organized_songs)
+        else:
+            return redirect(url_for('pages.home_page'))
+    # otherwise not logged in, redirect to the login page
     else:
         flash("Access unauthorized. Please login first.", "error")
         return redirect(url_for('pages.home_page'))
+
+
+def organize_songs_by_emot(rows):
+    '''
+    Takes the raw database output, of list of dictionaries and organizes
+    them by emotion, to be displayed on the page
+
+    Args:
+        rows (list of dicts): raw database output
+
+    Returns:
+        dict : songs sorted by emotion
+    '''
+    songs = {}
+
+    for row in rows:
+        emot = row['emotion']
+        url = row['songurl']
+        title = row['title']
+
+        if emot not in songs:
+            songs[emot] = []
+
+        songs[emot].append(
+            {
+                'url': url,
+                'title': title
+            }
+        )
+
+    return songs

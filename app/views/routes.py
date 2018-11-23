@@ -1,7 +1,6 @@
 from flask import render_template, Blueprint, request, abort, redirect, url_for, session, flash
 import json
 from werkzeug.security import generate_password_hash, check_password_hash
-import multiprocessing as mp
 from threading import Thread
 import os
 from app.views.db_manager import insert_user, get_password_for_user
@@ -21,12 +20,10 @@ def classify():
         url = request.json['url']
         email = session.get('user', None)
 
-        thread = Thread(target=classify_emotion, args=(url,email, conn))
+        thread = Thread(target=classify_emotion, args=(url, email))
         thread.start()
 
         return "success"
-
-
 
 
 # register route
@@ -37,6 +34,7 @@ def register():
     password = request.form['password']
     hashed_pw = generate_password_hash(password)
 
+    # attempt to insert this new user into the database
     err_code = insert_user(email, hashed_pw)
 
     if err_code == 0:
@@ -55,6 +53,7 @@ def login():
     email = request.form['email']
     password = request.form['password']
 
+    # get password for this user, if user exists
     saved_password, errno = get_password_for_user(email)
 
     if errno != 0:
@@ -79,7 +78,6 @@ def login():
         
 @mod.route('/logout', methods=['GET'])
 def logout():
-
     session.pop('user')
 
     flash('You have been logged out', 'success')
