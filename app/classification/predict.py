@@ -9,7 +9,7 @@ import glob
 import numpy as np
 import time
 import random
-from app.views.db_manager import insert_song, insert_user_song
+from app.views.db_manager import insert_song, insert_user_song, is_song_in_db
 
 
 label_to_emot = {0:'angry', 1:'happy', 2:'motivational', 3:'relaxing', 4:'sad'}
@@ -144,26 +144,28 @@ def classify_emotion(url, email):
         email (str): email address of the user to classify song for
     """
 
-    args = predict_class(url)
-
-    if args is None:
-        return
-
-    emot, title = args
-
-    # store embedded url in db
+    # use the embedded version of url
     url = url.replace('watch?v=', 'embed/')
 
-    # TODO work on persist errors using redis and show to user next time
-    # if there was some error in the classification, return 
-    if emot is None:
-        return 
+    # check if song has already been classified
+    if is_song_in_db(url):
+        # add song to user library
+        insert_user_song(email, url)
+    else:
+        # download and predict the class of the song
+        args = predict_class(url)
 
-    print('song is emot:', emot)
+        # if some error return none
+        if args is None or args[0] is None:
+            return
 
-    # save the songs emotion
-    insert_song(url, title, emot)
+        emot, title = args
 
-    # mark this song as part of this user's library
-    insert_user_song(email, url)
+        # TODO work on persist errors using redis and show to user next time
+        
+        # save the songs emotion
+        insert_song(url, title, emot)
+
+        # mark this song as part of this user's library
+        insert_user_song(email, url)
 

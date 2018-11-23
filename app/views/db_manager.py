@@ -151,3 +151,23 @@ def insert_user_song(email, url):
     finally:
         conn.close()
 
+
+def is_song_in_db(url):
+
+    # get connection
+    conn = connection_pool.get_connection()
+    cur = conn.cursor(dictionary=True)
+
+    query = "SELECT * FROM songemotions where songurl='%s';" % url
+
+    try:
+        cur.execute(query)
+        song = cur.fetchall()
+
+        return len(song) > 0
+    except Error as err:
+        print("Error : {}".format(err))
+        return False
+    finally:
+        conn.close()
+

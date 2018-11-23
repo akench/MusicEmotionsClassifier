@@ -23,6 +23,10 @@
 
             <div id="songs-viewer">
 
+                {% if songs|length == 0 %}
+                    <h4>You have no songs in your library. Please add some to the right.</h4>
+                {% endif %}
+
                 {% for emot in songs %}
 
                     {% if songs[emot]|length > 0 %}
@@ -51,10 +55,6 @@
                                 </div>
                             </div>
                         </div>
-
-                    {% else %}
-
-                        <h3>You have no songs in your library, try adding some to the right</h3>
 
                     {% endif %}
 
