@@ -78,7 +78,9 @@ def login():
         
 @mod.route('/logout', methods=['GET'])
 def logout():
-    session.pop('user')
+
+    if 'user' in session:
+        session.pop('user')
 
     flash('You have been logged out', 'success')
     return redirect(url_for('pages.home_page'))
