@@ -115,12 +115,18 @@ def get_songs_for_user(email):
     return songs, errno
 
 
+# TODO refactor to use vid_id instead of url
 def insert_song(url, title, emot):
+
+    # clean title, remove quotes so can insert in db
+    title = title.replace("'", "")
+    title = title.replace('"', "") 
+
     # get connection
     conn = connection_pool.get_connection()
     cur = conn.cursor(dictionary=True)
 
-    query = "INSERT INTO songemotions VALUES('%s', '%s', '%s');" % (url, title, emot)
+    query = 'INSERT INTO songemotions VALUES("%s", "%s", "%s");' % (url, title, emot)
     
     try:
         cur.execute(query)

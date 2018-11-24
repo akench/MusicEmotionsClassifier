@@ -118,8 +118,6 @@ def predict_class(youtube_url):
 
     random.shuffle(specs_imgs)
 
-    specs_imgs = specs_imgs[: int(len(specs_imgs) / 2)]
-
     start3 = time.clock()
     conf = get_confidences(specs_imgs)
     print("time to feed through model: ", time.clock() - start3)
