@@ -33,17 +33,14 @@
             <!-- if user is logged in, the image leads to dashboard, otherwise to login page -->
             {% if session.user %}
             <a id="nav-project-name" class="navbar-brand" href="/dashboard">
-                <img src="/static/resources/music_note.png" width="40" height="40"
-                    alt="">
-                Music Emotions Classifier
-            </a>
             {% else %}
             <a id="nav-project-name" class="navbar-brand" href="/">
+            {% endif %}
+
                 <img src="/static/resources/music_note.png" width="40" height="40"
                     alt="">
                 Music Emotions Classifier
             </a>
-            {% endif %}
 
             
 

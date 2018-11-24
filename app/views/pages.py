@@ -69,7 +69,7 @@ def organize_songs_by_emot(rows):
 
         songs[emot].append(
             {
-                'url': 'https://www.youtube.com/embed/%s' % vid_id,
+                'url': 'https://www.youtube.com/embed/{}'.format(vid_id),
                 'title': title
             }
         )

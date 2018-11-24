@@ -68,7 +68,7 @@ def get_confidences(spec_list):
     """
 
     # sad 0, happy 1, ... angry 4
-    label_list = [0, 0, 0, 0, 0, 0]
+    label_list = [0, 0, 0, 0, 0]
     graph = load_graph('/home/akench/Desktop/output_graph.pb')
 
     for img in spec_list:
@@ -100,7 +100,7 @@ def predict_class(youtube_url):
 
     start1 = time.clock()
     try:
-        dl_audio_path, title = dl_audio(youtube_url, None)
+        dl_audio_path, title = dl_audio(youtube_url)
     except Exception as err:
         # if there was some error downloading, just return None
         print('download error: {}'.format(err))
@@ -110,7 +110,7 @@ def predict_class(youtube_url):
 
 
     start2 = time.clock()
-    specs_imgs = graph_spectrogram(dl_audio_path, save = False)
+    specs_imgs = graph_spectrogram(dl_audio_path)
     print("time to create imgs: ", time.clock() - start2)
 
     # remove temporary audio file
