@@ -6,13 +6,13 @@ from app.classification.make_spectrogram import all_audio_to_spec
 
 def dl_audio(url, emot, save = True):
 
-	vid_id = url.split('=')[1]
+	# format is 'https://www.youtube.com/embed/{vid_id}'
+	vid_id = url.split('/')[-1]
 
 	if emot is None:
 		outfile = 'temp'
 	else:	
 		outfile = 'audio/' + emot + '/' + vid_id
-
 
 
 	if os.path.exists(outfile + '.mp3'):

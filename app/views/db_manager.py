@@ -46,7 +46,6 @@ def get_password_for_user(email):
         print("login err: {}".format(err))
         errno = err.no
     finally:
-        print("returning to pool get password")
         conn.close()
 
     return password, errno
@@ -78,7 +77,6 @@ def insert_user(email, password):
         return err.errno
     finally:
         # whether we got an exception or not, close the connection
-        print('returning to pool register')
         conn.close()
 
     # no errors
@@ -112,7 +110,6 @@ def get_songs_for_user(email):
         errno = err.errno
     finally:
         # return connection to pool
-        print('return to pool get songs')
         conn.close()
 
     return songs, errno

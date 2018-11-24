@@ -101,8 +101,9 @@ def predict_class(youtube_url):
     start1 = time.clock()
     try:
         dl_audio_path, title = dl_audio(youtube_url, None)
-    except:
+    except Exception as err:
         # if there was some error downloading, just return None
+        print('download error: {}'.format(err))
         return None
 
     print("time to download audio: ", time.clock() - start1)
@@ -149,6 +150,7 @@ def classify_emotion(url, email):
 
     # check if song has already been classified
     if is_song_in_db(url):
+        print('song already classified')
         # add song to user library
         insert_user_song(email, url)
     else:
@@ -162,7 +164,7 @@ def classify_emotion(url, email):
         emot, title = args
 
         # TODO work on persist errors using redis and show to user next time
-        
+
         # save the songs emotion
         insert_song(url, title, emot)
 

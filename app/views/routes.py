@@ -7,10 +7,7 @@ from app.views.db_manager import insert_user, get_password_for_user
 
 from app.classification import classify_emotion
 
-
 mod = Blueprint('routes', __name__)
-
-# cur = conn.cursor(pymysql.cursors.DictCursor)
 
 # classify url route
 @mod.route('/songs', methods=['GET', 'POST'])
