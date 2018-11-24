@@ -16,6 +16,7 @@ from multiprocessing import Pool
 label_to_emot = {0:'angry', 1:'happy', 2:'motivational', 3:'relaxing', 4:'sad'}
 
 
+
 def load_graph(graph_file_path):
 
     with tf.gfile.GFile(graph_file_path, 'rb') as f:
@@ -30,26 +31,29 @@ def load_graph(graph_file_path):
     return graph
 
 
-def inference(data, graph):
+
+def inference(img):
     """
     Performs inference on a graph and returns logits for each class
 
     Args:
-        data (nparray): spectrogram image in np array format
+        data (PIL.Image): spectrogram image to classify
         graph: tensorflow loaded graph
     """
 
     # list_of_tuples = [op.values()[0] for op in graph.get_operations()]
     # print(list_of_tuples)
 
-    x = graph.get_tensor_by_name('inceptionv3/Placeholder:0')
-    y = graph.get_tensor_by_name('inceptionv3/final_result:0')
+    input = graph.get_tensor_by_name('inceptionv3/Placeholder:0')
+    output = graph.get_tensor_by_name('inceptionv3/final_result:0')
+
+    img = resize_crop(img, size=299, grey = False)
+    data = [np.asarray(img)]
 
     with tf.Session(graph = graph) as sess:
-        out = sess.run(y, feed_dict={x: data})
-        label_list = sess.run(tf.argmax(tf.squeeze(out)))
-        return label_list
-
+        out = sess.run(output, feed_dict={input: data})
+        label = sess.run(tf.argmax(tf.squeeze(out)))
+        return label
 
 def percentify(x):
     perc = (x / np.sum(x))
@@ -70,15 +74,18 @@ def get_confidences(spec_list):
 
     # sad 0, happy 1, ... angry 4
     label_list = [0, 0, 0, 0, 0]
-    graph = load_graph('/home/akench/Desktop/output_graph.pb')
 
-    for img in spec_list:
+    pool = Pool()
+    results = [pool.apply_async(inference, args=(img,)) for img in spec_list]
+    labels = [p.get() for p in results]
 
-        img = resize_crop(img, size=299, grey = False)
-        arr = np.asarray(img)
+    for l in labels:
+        label_list[l] += 1
 
-        lbl = inference([arr], graph)
-        label_list[lbl] += 1
+    # for img in spec_list:
+
+    #     lbl = inference(img, graph)
+    #     label_list[lbl] += 1
 
     return label_list
 
@@ -99,7 +106,7 @@ def predict_class(youtube_url):
 
     t0 = time.time()
 
-    start1 = time.clock()
+    start1 = time.time()
     try:
         dl_audio_path, title = dl_audio(youtube_url)
     except Exception as err:
@@ -107,21 +114,21 @@ def predict_class(youtube_url):
         print('download error: {}'.format(err))
         return None
 
-    print("time to download audio: ", time.clock() - start1)
+    print("time to download audio: ", time.time() - start1)
 
 
-    start2 = time.clock()
+    start2 = time.time()
     specs_imgs = graph_spectrogram(dl_audio_path)
-    print("time to create imgs: ", time.clock() - start2)
+    print("time to create imgs: ", time.time() - start2)
 
     # remove temporary audio file
     os.remove(dl_audio_path)
 
-    random.shuffle(specs_imgs)
+    # random.shuffle(specs_imgs)
 
-    start3 = time.clock()
+    start3 = time.time()
     conf = get_confidences(specs_imgs)
-    print("time to feed through model: ", time.clock() - start3)
+    print("time to feed through model: ", time.time() - start3)
 
     print(conf)
     print('took %f seconds to predict.' % (time.time() - t0))
@@ -196,3 +203,6 @@ def extract_vid_id(url):
     else:
         # if dont know, just take the last 11 characters as the ID
         return url[-11:]
+
+#TODO use str(Path.home()) to remove hardcoded /home/akench
+graph = load_graph('/home/akench/Desktop/output_graph.pb')
