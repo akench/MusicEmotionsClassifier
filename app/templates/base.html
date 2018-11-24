@@ -24,6 +24,17 @@
     {% block head %} {% endblock %}
 
     <script src="/static/scripts/auth.js" async></script>
+
+    <script>
+
+        // removes all alerts after 5 seconds
+        $(function(){ 
+            setTimeout(function() {
+                $('.alert').fadeOut('fast');
+            }, 5000)
+        });
+    
+    </script>
 </head>
 
 <body>

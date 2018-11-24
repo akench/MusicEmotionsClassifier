@@ -13,8 +13,6 @@ import io
 from multiprocessing import Pool
 import random
 
-almost_zero = 0.001
-
 def split_list_by_num_samples(data, num_samples):
     """
     converts a flat list of audio data to many groups of audio data, so each can be turned into a spectrogram
