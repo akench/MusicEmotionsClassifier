@@ -61,7 +61,7 @@ def organize_songs_by_emot(rows):
 
     for row in rows:
         emot = row['emotion']
-        url = row['songurl']
+        vid_id = row['vid_id']
         title = row['title']
 
         if emot not in songs:
@@ -69,7 +69,7 @@ def organize_songs_by_emot(rows):
 
         songs[emot].append(
             {
-                'url': url,
+                'url': 'https://www.youtube.com/embed/%s' % vid_id,
                 'title': title
             }
         )

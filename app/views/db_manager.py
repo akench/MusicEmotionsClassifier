@@ -98,7 +98,7 @@ def get_songs_for_user(email):
     conn = connection_pool.get_connection()
     cur = conn.cursor(dictionary=True)
 
-    query = "SELECT songemotions.* FROM usersongs INNER JOIN songemotions ON usersongs.songurl=songemotions.songurl WHERE email='%s';" % email
+    query = "SELECT songemotions.* FROM usersongs INNER JOIN songemotions ON usersongs.vid_id=songemotions.vid_id WHERE email='%s';" % email
     
     songs = []
     errno = 0
@@ -115,8 +115,9 @@ def get_songs_for_user(email):
     return songs, errno
 
 
-# TODO refactor to use vid_id instead of url
-def insert_song(url, title, emot):
+def insert_song(vid_id, title, emot):
+
+    print(vid_id, len(vid_id))
 
     # clean title, remove quotes so can insert in db
     title = title.replace("'", "")
@@ -126,7 +127,7 @@ def insert_song(url, title, emot):
     conn = connection_pool.get_connection()
     cur = conn.cursor(dictionary=True)
 
-    query = 'INSERT INTO songemotions VALUES("%s", "%s", "%s");' % (url, title, emot)
+    query = 'INSERT INTO songemotions VALUES("%s", "%s", "%s");' % (vid_id, title, emot)
     
     try:
         cur.execute(query)
@@ -138,12 +139,12 @@ def insert_song(url, title, emot):
     finally:
         conn.close()
     
-def insert_user_song(email, url):
+def insert_user_song(email, vid_id):
     # get connection
     conn = connection_pool.get_connection()
     cur = conn.cursor(dictionary=True)
 
-    query = "INSERT INTO usersongs VALUES('%s', '%s');" % (email, url)
+    query = "INSERT INTO usersongs VALUES('%s', '%s');" % (email, vid_id)
 
     try:
         cur.execute(query)
@@ -155,13 +156,22 @@ def insert_user_song(email, url):
         conn.close()
 
 
-def is_song_in_db(url):
+def is_song_in_db(vid_id):
+    '''
+    Checks whether a song has already been classified as an emotion
+
+    Args:
+        vid_id (str): youtube video id
+
+    Returns:
+        bool : whether or not the song exists in songemotions database
+    '''
 
     # get connection
     conn = connection_pool.get_connection()
     cur = conn.cursor(dictionary=True)
 
-    query = "SELECT * FROM songemotions where songurl='%s';" % url
+    query = "SELECT * FROM songemotions where vid_id='%s';" % vid_id
 
     try:
         cur.execute(query)

@@ -113,7 +113,7 @@ def predict_class(youtube_url):
     specs_imgs = graph_spectrogram(dl_audio_path, save = False)
     print("time to create imgs: ", time.clock() - start2)
 
-
+    # remove temporary audio file
     os.remove(dl_audio_path)
 
     random.shuffle(specs_imgs)
@@ -145,12 +145,13 @@ def classify_emotion(url, email):
 
     # use the embedded version of url
     url = url.replace('watch?v=', 'embed/')
+    vid_id = extract_vid_id(url)
 
     # check if song has already been classified
-    if is_song_in_db(url):
+    if is_song_in_db(vid_id):
         print('song already classified')
         # add song to user library
-        insert_user_song(email, url)
+        insert_user_song(email, vid_id)
     else:
         # download and predict the class of the song
         args = predict_class(url)
@@ -164,8 +165,33 @@ def classify_emotion(url, email):
         # TODO work on persist errors using redis and show to user next time
 
         # save the songs emotion
-        insert_song(url, title, emot)
+        insert_song(vid_id, title, emot)
 
         # mark this song as part of this user's library
-        insert_user_song(email, url)
+        insert_user_song(email, vid_id)
 
+
+def extract_vid_id(url):
+    ''' 
+    Extracts a youtube video id from the url
+
+    Args:
+        url (str): youtube url
+
+    Returns:
+        str : video id
+    '''
+
+    # remove an ending slash, if there is one
+    if url[-1] == '/':
+        url = url[:-1]
+
+    if 'watch?v=' in url:
+        # get the stuff after the watch?v=
+        return url.split('watch?v=')[-1]
+    elif 'embed/' in url:
+        return url.split('embed/')[-1]
+
+    else:
+        # if dont know, just take the last 11 characters as the ID
+        return url[-11:]
