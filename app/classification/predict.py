@@ -11,6 +11,7 @@ import time
 import random
 from app.views.db_manager import insert_song, insert_user_song, is_song_in_db
 from multiprocessing import Pool
+from pathlib import Path
 
 
 label_to_emot = {0:'angry', 1:'happy', 2:'motivational', 3:'relaxing', 4:'sad'}
@@ -204,5 +205,5 @@ def extract_vid_id(url):
         # if dont know, just take the last 11 characters as the ID
         return url[-11:]
 
-#TODO use str(Path.home()) to remove hardcoded /home/akench
-graph = load_graph('/home/akench/Desktop/output_graph.pb')
+graph_path = os.path.join(Path.home(), 'Desktop/output_graph.pb')
+graph = load_graph(graph_path)

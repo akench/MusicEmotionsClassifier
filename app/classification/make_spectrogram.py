@@ -11,6 +11,7 @@ import librosa.display
 import numpy as np
 import io
 from multiprocessing import Pool
+import random
 
 almost_zero = 0.001
 
@@ -77,20 +78,25 @@ def audio_sample_to_img(sample, rate, secs_per_spec):
     return img
 
 
-def graph_spectrogram(audio_file, secs_per_spec = 10):
+def graph_spectrogram(audio_file):
     """
     creates spectrograms using librosa library, given the audio file path and the number of seconds to have per spectrogram
 
     Args:
         audio_file (str): file path to the audio file which should be converted to spectrograms
-        secs_per_spec (int): the number of seconds from the audio file to be displayed in the spectrogram
 
     Returns:
         will return the list of spectrogram image objects, otherwise no return
     """
-
+    secs_per_spec = 10
     data, rate = librosa.core.load(audio_file)
     split_data = split_list_by_num_samples(data, rate * secs_per_spec)
+
+    random.shuffle(split_data)
+
+    # if songs longer than 100 seconds, take the first 10 images, since its shuffled
+    if len(split_data) > 10:
+        split_data = split_data[:10]
 
     pool = Pool()
     results = [pool.apply_async(audio_sample_to_img, args=(sample, rate, secs_per_spec)) for sample in split_data]
