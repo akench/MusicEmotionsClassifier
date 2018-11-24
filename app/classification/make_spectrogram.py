@@ -10,7 +10,7 @@ import librosa
 import librosa.display
 import numpy as np
 import io
-import multiprocessing as mp
+from multiprocessing import Pool
 
 almost_zero = 0.001
 
@@ -34,6 +34,49 @@ def split_list_by_num_samples(data, num_samples):
 
     return new
 
+
+def audio_sample_to_img(sample, rate, secs_per_spec):
+    '''
+    Converts the audio sample to a spectrogram image
+
+    Args:
+        sample (list) : samples taken from audio
+        rate (int): sample rate of audio
+
+    Returns:
+        PIL Image of spectrogram
+    '''
+
+    S = librosa.feature.melspectrogram(sample, sr=rate, n_mels=128)
+    log_S = librosa.amplitude_to_db(S)
+
+    plt.figure(figsize=(secs_per_spec, 7))
+
+    librosa.display.specshow(log_S, sr=rate, x_axis='time', y_axis='mel')
+
+    plt.tight_layout()
+    plt.axis('off')
+    plt.gray()
+    plt.draw()
+
+    # save plot into buffer
+    buf = io.BytesIO()
+    plt.savefig(buf, bbox_inches='tight', pad_inches = 0, dpi=50, format='jpg')
+
+    # open the image from the buffer and crop it to get the important parts
+    buf.seek(0)
+    img = Image.open(buf)
+    img = img.crop((120, 4, img.size[0] - 3, img.size[1] - 20))
+
+    # close everything
+    buf.close()
+    plt.clf()
+    plt.cla()
+    plt.close()
+
+    return img
+
+
 def graph_spectrogram(audio_file, secs_per_spec = 10):
     """
     creates spectrograms using librosa library, given the audio file path and the number of seconds to have per spectrogram
@@ -49,36 +92,9 @@ def graph_spectrogram(audio_file, secs_per_spec = 10):
     data, rate = librosa.core.load(audio_file)
     split_data = split_list_by_num_samples(data, rate * secs_per_spec)
 
-    specs = []
-
-    for sample in split_data:
-
-        S = librosa.feature.melspectrogram(sample, sr=rate, n_mels=128)
-        log_S = librosa.amplitude_to_db(S)
-
-        plt.figure(figsize=(secs_per_spec, 7))
-
-        librosa.display.specshow(log_S, sr=rate, x_axis='time', y_axis='mel')
-
-
-        plt.tight_layout()
-        plt.axis('off')
-        plt.gray()
-        plt.draw()
-
-        buf = io.BytesIO()
-        plt.savefig(buf, bbox_inches='tight', pad_inches = 0, dpi=50, format='jpg')
-
-        buf.seek(0)
-        img = Image.open(buf)
-        img = img.crop((120, 4, img.size[0] - 3, img.size[1] - 20))
-
-        specs.append(img)
-        buf.close()
-
-        plt.clf()
-        plt.cla()
-        plt.close()
+    pool = Pool()
+    results = [pool.apply_async(audio_sample_to_img, args=(sample, rate, secs_per_spec)) for sample in split_data]
+    specs = [p.get() for p in results]
 
     return specs
 

@@ -10,6 +10,7 @@ import numpy as np
 import time
 import random
 from app.views.db_manager import insert_song, insert_user_song, is_song_in_db
+from multiprocessing import Pool
 
 
 label_to_emot = {0:'angry', 1:'happy', 2:'motivational', 3:'relaxing', 4:'sad'}
