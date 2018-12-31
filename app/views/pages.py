@@ -13,12 +13,9 @@ def home_page():
     else:
         return render_template('home.html')
 
-
-@mod.route('/about', methods=['GET'])
-def about_page():
-    # render the about page
-    return render_template('about.html')
-
+@mod.route('/pricing', methods=['GET'])
+def pricing_page():
+    return render_template('pricing.html')
 
 @mod.route('/dashboard', methods=['GET'])
 def dashboard_page():
