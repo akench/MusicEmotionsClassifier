@@ -1,3 +1,4 @@
+import os
 import mysql.connector
 from mysql.connector import Error
 from mysql.connector import pooling
@@ -7,10 +8,10 @@ try:
         pool_name="musicemotions_pool",
         pool_size=5,
         pool_reset_session=False,
-        host='localhost',
-        database='musicemotions',
-        user='testuser',
-        password='password'
+        host=os.environ.get('DB_HOST'),
+        database=os.environ.get('DB_DATABASE'),
+        user=os.environ.get('DB_USERNAME'),
+        password=os.environ.get('DB_PASSWORD')
     )
 except Exception as e:
     print("exception in db")
