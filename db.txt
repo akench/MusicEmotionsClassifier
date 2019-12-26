@@ -2,10 +2,10 @@ users table
 col: email (prim), password
 
 user song table
-col : email (foreign), songURL (foreign)
+col : email (foreign), vid-id (foreign)
 
-song type table
-col: songURL (prim), emotion
+song emotions table
+col: vid_id (prim), title, emotion
 
 
 data {
@@ -13,3 +13,19 @@ data {
     sad : {url3, url4},
     ...
 }
+
+==============
+installing mysql
+
+install with sudo apt-get
+https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-18-04
+
+root, password
+
+sudo mysql -u root -p
+then enter 'password'
+
+create database musicemotionsclassifier;
+create table users (email VARCHAR(100), password VARCHAR(100) NOT NULL, PRIMARY KEY (email));
+create table songemotions (vid_id VARCHAR(11), title VARCHAR(100) NOT NULL, emotion VARCHAR(20) NOT NULL, PRIMARY KEY (vid_id));
+create table usersongs (email VARCHAR(100), vid_id VARCHAR(11) NOT NULL, PRIMARY KEY (email, vid_id), FOREIGN KEY (email) REFERENCES users(email), FOREIGN KEY (vid_id) REFERENCES songemotions(vid_id));

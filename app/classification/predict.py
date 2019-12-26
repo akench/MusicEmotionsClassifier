@@ -205,5 +205,4 @@ def extract_vid_id(url):
         # if dont know, just take the last 11 characters as the ID
         return url[-11:]
 
-graph_path = os.path.join(Path.home(), 'output_graph.pb')
-graph = load_graph(graph_path)
+graph = load_graph('output_graph.pb')

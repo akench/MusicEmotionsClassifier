@@ -8,13 +8,13 @@ try:
         pool_name="musicemotions_pool",
         pool_size=5,
         pool_reset_session=False,
-        host=os.environ.get('DB_HOST'),
-        database=os.environ.get('DB_DATABASE'),
-        user=os.environ.get('DB_USERNAME'),
-        password=os.environ.get('DB_PASSWORD')
+        host='localhost',
+        database='musicemotionsclassifier',
+        user='root',
+        password='password'
     )
 except Exception as e:
-    print("exception in db")
+    print(e)
     exit()
 
 
@@ -118,8 +118,6 @@ def get_songs_for_user(email):
 
 def insert_song(vid_id, title, emot):
 
-    print(vid_id, len(vid_id))
-
     # clean title, remove quotes so can insert in db
     title = title.replace("'", "")
     title = title.replace('"', "") 
@@ -184,4 +182,3 @@ def is_song_in_db(vid_id):
         return False
     finally:
         conn.close()
-
